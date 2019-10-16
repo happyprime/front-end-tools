@@ -1,0 +1,21 @@
+{
+	"name": "front-end-tools",
+	"version": "0.0.1",
+	"description": "JavaScript tools for front-end interactions.",
+	"main": "",
+	"scripts": {
+		"lint:js": "eslint ./**/src"
+	},
+	"devDependencies": {
+		"eslint": "^6.5.1"
+	},
+	"eslintConfig": {
+		"env": {
+			"amd": true,
+			"browser": true,
+			"es6": true,
+			"node": true
+		},
+		"extends": "eslint:recommended"
+	}
+}
