@@ -6,7 +6,7 @@
 	color: #fff;
 }
 
-#nav.vertical {
+#nav {
 	bottom: 0;
 	height: 100%;
 	position: fixed;
@@ -15,25 +15,25 @@
 	z-index: 1;
 }
 
-#nav.vertical ul {
+#nav ul {
 	list-style: none;
 	padding-left: 20px;
 }
 
-#nav.vertical > ul {
+#nav > ul {
 	margin: 0;
 	padding: 20px;
 }
 
-#nav.vertical ul ul {
+#nav ul ul {
 	display: none;
 }
 
-#nav.vertical ul li.open > ul {
+#nav ul li.open > ul {
 	display: block;
 }
 
-.vertical-nav-demo main {
+main {
 	margin-left: 200px;
 	padding: 40px;
 }
