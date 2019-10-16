@@ -2,7 +2,8 @@
 	"name": "front-end-tools",
 	"version": "0.0.1",
 	"description": "JavaScript tools for front-end interactions.",
-	"main": "",
+	"repository": "https://github.com/happyprime/front-end-tools",
+	"license": "GPL-3.0",
 	"scripts": {
 		"start": "babel ./**/src/*.js -w -d ./**/dist/",
 		"build": "babel ./**/src/*.js -d ./**/dist/",
