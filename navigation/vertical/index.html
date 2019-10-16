@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Vertical Navigation - Front-end Tools</title>
+	</head>
+	<body class="vertical-nav-demo">
+
+		<a href="#nav" class="screen-reader-shortcut">Skip to navigation</a>
+
+		<main id="main">
+
+			<article>
+
+				<h1>Vertical Navigation</h1>
+
+				<p>This is a vertical navigation menu that stays available to users regardless of where they are on the page.</p>
+
+				<p>If the menu is taller than the viewport, it will scroll along with the page until the bottom of the navigation element - or top, if scrolling up - is within the viewport.</p>
+
+				<p>It also features toggleable nested sections for more complex navigational needs.</p>
+
+				<p>Scroll around and open some of the sections on the left to see it in action!</p>
+
+				<h2>Usage</h2>
+
+				<p>Include the script on your page with <code>&lt;script src="navigation.js"&gt;&lt;/script&gt;</code>. (If you put it in the <code>head</code>, add the <code>defer</code> attribute.)</p>
+
+				<p>Initialize the plugin with <code>&lt;script&gt;navigation.init();&lt;/script&gt;</code>.</p>
+
+				<p>Settings can be passed in to the plugin like so:</p>
+
+				<code class="language-javascript" data-lang="javascript">
+					<pre>
+navigation.init( {
+	breakpoint: 960,
+	main: document.getElementById( 'main' ),
+	nav: document.getElementById( 'nav' ),
+} );
+					</pre>
+				</code>
+
+				<p>The available settings are as follows:</p>
+
+				<ul>
+					<li><code>breakpoint</code>: Pixel width at which the navigation is styled for mobile devices. Defaults to <code>null</code>.</li>
+					<li><code>main</code>: <strong>Required.</strong> The element containing the page's content. Defaults to <code>null</code>.</li>
+					<li><code>minHeights</code>: Whether the plugin should set minimum heights on the main and nav elements. Defaults to <code>true</code>.</li>
+					<li><code>nav</code>: <strong>Required.</strong> The element containing the navigation. Defaults to <code>null</code>.</li>
+					<li><code>orientation</code>: The orientation of the navigation. Accepts <code>vertical</code> or <code>horizontal</code>. Defaults to <code>vertical</code>.</li>
+					<li><code>position</code>: Initial <code>top</code> value of the navigation element from CSS, if set. Defaults to <code>0</code>.</li>
+				</ul>
+
+				<p class="placeholder-content">Placeholder content</p>
+
+				<p class="placeholder-content">Placeholder content</p>
+
+				<p class="placeholder-content">Placeholder content</p>
+
+				<p class="placeholder-content">Placeholder content</p>
+
+			</article>
+
+		</main>
+
+		<nav id="nav" class="vertical">
+			<ul>
+				<li><a href="../../">Front-end Tools</a></li>
+				<li>
+					<a href="#">Section 1</a>
+					<ul>
+						<li><a href="#">Link 1</a></li>
+						<li><a href="#">Link 2</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">Section 2</a>
+					<ul>
+						<li>
+							<a href="#">Section 2 A</a>
+							<ul>
+								<li><a href="#">Link 1</a></li>
+								<li><a href="#">Link 2</a></li>
+								<li><a href="#">Link 3</a></li>
+							</ul>
+						</li>
+						<li><a href="#">Link 1</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">Section 3</a>
+					<ul>
+						<li>
+							<a href="#">Section 3 A</a>
+							<ul>
+								<li><a href="#">Link 1</a></li>
+								<li><a href="#">Link 2</a></li>
+								<li><a href="#">Link 3</a></li>
+								<li><a href="#">Link 4</a></li>
+								<li><a href="#">Link 5</a></li>
+								<li><a href="#">Link 6</a></li>
+								<li><a href="#">Link 7</a></li>
+								<li><a href="#">Link 8</a></li>
+								<li><a href="#">Link 9</a></li>
+								<li><a href="#">Link 10</a></li>
+								<li><a href="#">Link 11</a></li>
+								<li><a href="#">Link 12</a></li>
+								<li><a href="#">Link 13</a></li>
+								<li><a href="#">Link 14</a></li>
+								<li><a href="#">Link 15</a></li>
+								<li><a href="#">Link 16</a></li>
+								<li><a href="#">Link 17</a></li>
+								<li><a href="#">Link 18</a></li>
+								<li><a href="#">Link 19</a></li>
+								<li><a href="#">Link 20</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="#">Section 3 B</a>
+							<ul>
+								<li><a href="#">Link 1</a></li>
+								<li><a href="#">Link 2</a></li>
+								<li><a href="#">Link 3</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">Section 4</a>
+					<ul>
+						<li><a href="#">Link 1</a></li>
+						<li><a href="#">Link 2</a></li>
+						<li><a href="#">Link 3</a></li>
+						<li><a href="#">Link 4</a></li>
+						<li><a href="#">Link 5</a></li>
+						<li><a href="#">Link 6</a></li>
+						<li>
+							<a href="#">Section 4 A</a>
+							<ul>
+								<li><a href="#">Link 1</a></li>
+								<li><a href="#">Link 2</a></li>
+								<li><a href="#">Link 3</a></li>
+								<li><a href="#">Link 4</a></li>
+								<li><a href="#">Link 5</a></li>
+								<li><a href="#">Link 6</a></li>
+								<li><a href="#">Link 7</a></li>
+								<li><a href="#">Link 8</a></li>
+								<li><a href="#">Link 9</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="#">Section 4 B</a>
+							<ul>
+								<li><a href="#">Link 1</a></li>
+								<li>
+									<a href="#">Section 4 B 1</a>
+									<ul>
+										<li><a href="#">Link 1</a></li>
+										<li><a href="#">Link 2</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#">Section 4 C</a>
+							<ul>
+								<li><a href="#">Link 1</a></li>
+								<li><a href="#">Link 2</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li><a href="#">Link 1</a></li>
+				<li><a href="#">Link 2</a></li>
+			</ul>
+		</nav>
+	</body>
+</html>
