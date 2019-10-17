@@ -33,10 +33,31 @@
 	};
 
 	/**
+	 * Merge any user options with the default settings.
+	 * @private
+	 * @param {Object} defaults Default settings.
+	 * @param {Object} options  User settings.
+	 */
+	const extendDefaults = function( defaults, options ) {
+
+		let property;
+
+		for ( property in options ) {
+			if ( Object.prototype.hasOwnProperty.call( options, property ) ) {
+				defaults[ property ] = options[ property ];
+			}
+		}
+
+		return defaults;
+
+	};
+
+	/**
 	 * Sets the minimum height on both the `main` and `nav` elements.
 	 * @private
 	 */
 	const setMinHeight = function () {
+
 		if ( !settings.minHeights ) return;
 
 		const navHeight = settings.nav.querySelector( 'ul' ).scrollHeight;
@@ -47,6 +68,7 @@
 
 		settings.main.style.minHeight = minHeight;
 		settings.nav.style.minHeight = minHeight;
+
 	}
 
 	/**
@@ -55,6 +77,7 @@
 	 * @param {Event} event The click event.
 	 */
 	const toggleSection = function ( event ) {
+
 		const target = event.target;
 
 		// Bail if the click isn't on an anchor.
@@ -77,6 +100,7 @@
 		setMinHeight();
 
 		positionNav();
+
 	};
 
 	/**
@@ -84,6 +108,7 @@
 	 * @private
 	 */
 	const positionNav = function () {
+
 		const windowTop = window.scrollY;
 		const scrollDiff = navScrollState.top - windowTop;
 		const upperBound = ( settings.nav.scrollHeight - window.innerHeight ) * -1;
@@ -109,25 +134,31 @@
 		navScrollState.top = windowTop;
 
 		settings.nav.style.top = position + 'px';
+
+		requestAnimationFrame( positionNav );
+
 	};
 
 	/**
-	 * Merge any user options with the default settings.
+	 * Ensure that the `positionNav` function fires only when needed,
+	 * and use the `requestAnimationFrame` method for optimal performance.
 	 * @private
-	 * @param {Object} defaults Default settings.
-	 * @param {Object} options  User settings.
 	 */
-	const extendDefaults = function( defaults, options ) {
-		var property;
+	const scrollHandler = function () {
 
-		for ( property in options ) {
-			if ( Object.prototype.hasOwnProperty.call( options, property ) ) {
-				defaults[ property ] = options[ property ];
-			}
+		if (
+			settings.breakpoint && settings.breakpoint > window.innerWidth
+			|| settings.main.offsetHeight < settings.nav.scrollHeight
+			|| window.innerHeight > ( settings.nav.scrollHeight + settings.position )
+			|| settings.position < settings.nav.getBoundingClientRect().top
+		) {
+			settings.nav.removeAttribute( 'style' );
+			return;
 		}
 
-		return defaults;
-	}
+		requestAnimationFrame( positionNav );
+
+	};
 
 	/**
 	 * Destroy the current initialization.
@@ -142,10 +173,8 @@
 		settings.element.removeEventListener( 'click', toggleSection, false );
 
 		if ( 'vertical' === settings.orientation ) {
-			document.removeEventListener( 'wheel', positionNav, {
-				capture: true,
-				passive: true
-			} );
+			window.addEventListener( 'resize', setMinHeight, true );
+			window.removeEventListener( 'scroll', positionNav, true );
 		}
 
 		// Reset variables.
@@ -180,33 +209,11 @@
 		settings.nav.addEventListener( 'click', toggleSection, false );
 
 		if ( 'vertical' === settings.orientation ) {
-			document.addEventListener(
-				'wheel',
-				function () {
-					// Stop if the window is narrower than the set breakpoint.
-					if (
-						settings.breakpoint && settings.breakpoint > window.innerWidth
-						|| settings.main.offsetHeight < settings.nav.scrollHeight
-						|| window.innerHeight > ( settings.nav.scrollHeight + settings.position )
-						|| settings.position < settings.nav.getBoundingClientRect().top
-					) {
-						settings.nav.removeAttribute( 'style' );
-						return;
-					}
-
-					requestAnimationFrame( positionNav );
-				},
-				{
-					capture: true,
-					passive: true
-				}
-			);
-
-
 			setMinHeight();
-
-			window.addEventListener( 'resize', setMinHeight );
+			window.addEventListener( 'resize', setMinHeight, true );
+			window.addEventListener( 'scroll', scrollHandler, true );
 		}
+
 	};
 
 	return navigation;
