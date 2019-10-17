@@ -2,6 +2,11 @@
 
 A plug-and-play component with basic styling and configurable JavaScript handling for an accessible and intuitive navigation UI.
 
+## Demos
+
+* [Horizontal Navigation](https://happyprime.github.io/front-end-tools/navigation/horizontal/)
+* [Vertical Navigation](https://happyprime.github.io/front-end-tools/navigation/vertical/)
+
 ## Usage
 
 Include the stylesheet and script on your page, and initialize the JavaScript with `navigation.init();`
