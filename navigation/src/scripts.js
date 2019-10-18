@@ -1,4 +1,4 @@
-(function (root, factory) {
+( ( root, factory ) => {
 	if ( typeof define === 'function' && define.amd ) {
 		define([], factory);
 	} else if ( typeof exports === 'object' ) {
@@ -6,7 +6,7 @@
 	} else {
 		root.navigation = factory();
 	}
-})(typeof self !== 'undefined' ? self : this, function () {
+} )( typeof self !== 'undefined' ? self : this, () => {
 
 	'use strict';
 
@@ -38,7 +38,7 @@
 	 * @param {Object} defaults Default settings.
 	 * @param {Object} options  User settings.
 	 */
-	const extendDefaults = function( defaults, options ) {
+	const extendDefaults = ( defaults, options ) => {
 
 		let property;
 
@@ -85,7 +85,7 @@
 		// Create the dropdown button.
 		const dropdownButton = getDropdownButton();
 
-		submenus.forEach( submenu => {
+		submenus.forEach( ( submenu ) => {
 			const parentMenuItem = submenu.parentNode;
 			let dropdown = parentMenuItem.querySelector( '.js-dropdown-toggle' );
 
@@ -106,7 +106,7 @@
 	 * Sets the minimum height on both the `main` and `nav` elements.
 	 * @private
 	 */
-	const setMinHeight = function () {
+	const setMinHeight = () => {
 
 		if ( !settings.minHeights ) return;
 
@@ -126,7 +126,7 @@
 	 * @private
 	 * @param {Event} event The click event.
 	 */
-	const toggleSection = function ( event ) {
+	const toggleSection = ( event ) => {
 
 		const target = event.target;
 
@@ -148,7 +148,7 @@
 	 * Ensures proper positioning of the navigation when the page scrolled.
 	 * @private
 	 */
-	const positionNav = function () {
+	const positionNav = () => {
 
 		const windowTop = window.scrollY;
 		const scrollDiff = navScrollState.top - windowTop;
@@ -185,7 +185,7 @@
 	 * and uses the `requestAnimationFrame` method for optimal performance.
 	 * @private
 	 */
-	const scrollHandler = function () {
+	const scrollHandler = () => {
 
 		if (
 			settings.breakpoint && settings.breakpoint > window.innerWidth
@@ -205,7 +205,7 @@
 	 * Destroys the current initialization.
 	 * @public
 	 */
-	navigation.destroy = function () {
+	navigation.destroy = () => {
 
 		// If plugin isn't already initialized, stop.
 		if ( !settings ) return;
@@ -235,7 +235,7 @@
 	 * @param {String}  options.orientation The orientation of the navigation. Accepts `vertical` or `horizontal`. Defaults to `vertical`.
 	 * @param {Number}  options.position    Initial `top` value of the navigation element from CSS, if set. Defaults to `0`.
 	 */
-	navigation.init = function ( options ) {
+	navigation.init = ( options ) => {
 
 		// Check for required settings.
 		if ( !options.nav || !options.main ) return;
