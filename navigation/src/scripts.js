@@ -33,7 +33,7 @@
 	};
 
 	/**
-	 * Merge any user options with the default settings.
+	 * Merges any user options with the default settings.
 	 * @private
 	 * @param {Object} defaults Default settings.
 	 * @param {Object} options  User settings.
@@ -51,6 +51,56 @@
 		return defaults;
 
 	};
+
+	/**
+	 * Returns the dropdown button element needed for the menu.
+	 */
+	const getDropdownButton = () => {
+
+		const dropdownButton = document.createElement( 'button' );
+
+		dropdownButton.classList.add( 'dropdown-toggle' , 'js-dropdown-toggle' );
+
+		// Revisit for translation and internationalization.
+		dropdownButton.setAttribute( 'aria-label', 'Expand child menu' );
+
+		return dropdownButton;
+
+	};
+
+	/**
+	 * Adjusts the navigation markup to be more accessible.
+	 * @private
+	 */
+	const accessibleNav = () => {
+
+		const menu = settings.nav.querySelector( 'ul' );
+
+		// Get the submenus.
+		const submenus = menu.querySelectorAll( 'ul' );
+
+		// No point if no submenus.
+		if ( ! submenus.length ) return;
+
+		// Create the dropdown button.
+		const dropdownButton = getDropdownButton();
+
+		submenus.forEach( submenu => {
+			const parentMenuItem = submenu.parentNode;
+			let dropdown = parentMenuItem.querySelector( '.js-dropdown-toggle' );
+
+			// If no dropdown, create one.
+			if ( ! dropdown ) {
+				const thisDropdownButton = dropdownButton.cloneNode( true );
+
+				// Add before submenu.
+				submenu.parentNode.insertBefore( thisDropdownButton, submenu );
+			}
+		} );
+
+		menu.classList.add( 'has-dropdown-toggle' );
+
+	}
 
 	/**
 	 * Sets the minimum height on both the `main` and `nav` elements.
@@ -80,22 +130,13 @@
 
 		const target = event.target;
 
-		// Bail if the click isn't on an anchor.
-		if ( !( target instanceof HTMLAnchorElement ) ) {
-			return;
-		}
+		// Bail if the click isn't on a dropdown toggle button.
+		if ( !target.classList.contains( 'js-dropdown-toggle' ) ) return;
 
-		// Bail if the anchor doesn't have any siblings.
-		// A quick and dirty way to determine if the nav item has a child list.
-		if ( !target.parentNode.children[1] ) {
-			return;
-		}
+		// Toggle the `open` class on the parent `li`.
+		target.parentNode.classList.toggle( 'toggled-open' );
 
-		// Don't follow the link.
-		event.preventDefault();
-
-		// Toggle the `open` class in the anchors parent li.
-		target.parentNode.classList.toggle( 'open' );
+		target.toggleAttribute( 'aria-expanded' );
 
 		setMinHeight();
 
@@ -140,8 +181,8 @@
 	};
 
 	/**
-	 * Ensure that the `positionNav` function fires only when needed,
-	 * and use the `requestAnimationFrame` method for optimal performance.
+	 * Ensures that the `positionNav` function fires only when needed,
+	 * and uses the `requestAnimationFrame` method for optimal performance.
 	 * @private
 	 */
 	const scrollHandler = function () {
@@ -161,7 +202,7 @@
 	};
 
 	/**
-	 * Destroy the current initialization.
+	 * Destroys the current initialization.
 	 * @public
 	 */
 	navigation.destroy = function () {
@@ -183,7 +224,7 @@
 	};
 
 	/**
-	 * Initialize Plugin.
+	 * Initializes the plugin.
 	 *
 	 * @public
 	 * @param {Object}  options             User settings.
@@ -204,6 +245,8 @@
 
 		// Merge user options with defaults.
 		settings = extendDefaults( defaults, options || {} );
+
+		accessibleNav();
 
 		// Listen for click events on the navigation element.
 		settings.nav.addEventListener( 'click', toggleSection, false );
