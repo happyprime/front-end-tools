@@ -2,13 +2,6 @@
  * From https://github.com/hankchizljaw/modern-css-reset
  */
 
-/* Box sizing rules */
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-
 /* Remove default padding */
 ul[class],
 ol[class] {
@@ -35,10 +28,18 @@ dd {
 
 /* Set core body defaults */
 body {
+	box-sizing: border-box;
 	min-height: 100vh;
 	scroll-behavior: smooth;
 	text-rendering: optimizeSpeed;
 	line-height: 1.5;
+}
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
 }
 
 /* Remove list styles on ul, ol elements with a class attribute */
