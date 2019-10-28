@@ -64,6 +64,8 @@
 		// Revisit for translation and internationalization.
 		dropdownButton.setAttribute( 'aria-label', 'Expand child menu' );
 
+		dropdownButton.setAttribute( 'aria-expanded', 'false' );
+
 		return dropdownButton;
 
 	};
@@ -119,7 +121,7 @@
 		settings.main.style.minHeight = minHeight;
 		settings.nav.style.minHeight = minHeight;
 
-	}
+	};
 
 	/**
 	 * Toggles the `open` class for list items containing child lists.
@@ -136,7 +138,9 @@
 		// Toggle the `open` class on the parent `li`.
 		target.parentNode.classList.toggle( 'toggled-open' );
 
-		target.toggleAttribute( 'aria-expanded' );
+		const expanded = 'false' === target.getAttribute( 'aria-expanded' ) ? 'true' : 'false';
+
+		target.setAttribute( 'aria-expanded', expanded );
 
 		setMinHeight();
 
