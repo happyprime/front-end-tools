@@ -2,13 +2,6 @@
  * From https://github.com/hankchizljaw/modern-css-reset
  */
 
-/* Box sizing rules */
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-
 /* Remove default padding */
 ul[class],
 ol[class] {
@@ -35,10 +28,18 @@ dd {
 
 /* Set core body defaults */
 body {
+	box-sizing: border-box;
+	line-height: 1.5;
 	min-height: 100vh;
 	scroll-behavior: smooth;
 	text-rendering: optimizeSpeed;
-	line-height: 1.5;
+}
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
 }
 
 /* Remove list styles on ul, ol elements with a class attribute */
@@ -54,8 +55,8 @@ a:not([class]) {
 
 /* Make images easier to work with */
 img {
-	max-width: 100%;
 	display: block;
+	max-width: 100%;
 }
 
 /* Natural flow and rhythm in articles by default */
@@ -74,9 +75,9 @@ select {
 /* Remove all animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
 	* {
-	animation-duration: 0.01ms !important;
-	animation-iteration-count: 1 !important;
-	transition-duration: 0.01ms !important;
-	scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
 	}
 }

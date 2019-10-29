@@ -30,6 +30,6 @@ code {
 }
 
 pre {
-	tab-size: 4;
 	overflow: scroll;
+	tab-size: 4;
 }
