@@ -112,6 +112,11 @@
 
 		if ( !settings.minHeights ) return;
 
+		if ( settings.breakpoint && settings.breakpoint > window.innerWidth ) {
+			settings.nav.removeAttribute( 'style' );
+			return;
+		}
+
 		const navHeight = settings.nav.querySelector( 'ul' ).scrollHeight;
 		const windowHeight = window.innerHeight;
 		const minHeight = ( navHeight > windowHeight )
@@ -154,7 +159,8 @@
 	 */
 	const positionNav = () => {
 
-		const windowTop = window.scrollY;
+		const windowTop = window.pageYOffset;
+		const bottomedOut = ( window.innerHeight + windowTop ) >= document.body.offsetHeight;
 		const scrollDiff = navScrollState.top - windowTop;
 		const upperBound = ( settings.nav.scrollHeight - window.innerHeight ) * -1;
 
@@ -171,7 +177,7 @@
 
 		// If the position is outside of the upper bound, reset it to the upper bound.
 		// This prevents scrolling too far down.
-		if ( position < upperBound ) {
+		if ( position < upperBound || bottomedOut ) {
 			position = upperBound;
 		}
 
@@ -179,8 +185,6 @@
 		navScrollState.top = windowTop;
 
 		settings.nav.style.top = position + 'px';
-
-		requestAnimationFrame( positionNav );
 
 	};
 
@@ -192,16 +196,12 @@
 	const scrollHandler = () => {
 
 		if (
-			settings.breakpoint && settings.breakpoint > window.innerWidth
-			|| settings.main.offsetHeight < settings.nav.scrollHeight
-			|| window.innerHeight > ( settings.nav.scrollHeight + settings.position )
-			|| settings.position < settings.nav.getBoundingClientRect().top
+			( !settings.breakpoint || settings.breakpoint < window.innerWidth )
+			&& settings.main.offsetHeight > settings.nav.scrollHeight
+			&& window.innerHeight < ( settings.nav.scrollHeight + settings.position )
 		) {
-			settings.nav.removeAttribute( 'style' );
-			return;
+			requestAnimationFrame( positionNav );
 		}
-
-		requestAnimationFrame( positionNav );
 
 	};
 
