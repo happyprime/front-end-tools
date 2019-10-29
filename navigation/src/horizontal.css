@@ -33,7 +33,7 @@
 		z-index: -2;
 	}
 
-	#nav .has-dropdown-toggle ul {
+	#nav .has-submenu-toggle ul {
 		display: block;
 	}
 
@@ -45,7 +45,7 @@
 		color: #fff;
 	}
 
-	#nav .dropdown-toggle {
+	#nav .submenu-toggle {
 		display: none;
 	}
 

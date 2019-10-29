@@ -18,7 +18,7 @@
 
 	// Default settings.
 	const defaults = {
-		breakpoint: null,
+		breakpoint: 960,
 		main: null,
 		nav: null,
 		orientation: 'vertical',
@@ -33,7 +33,7 @@
 	};
 
 	/**
-	 * Merges any user options with the default settings.
+	 * Merges user options with the default settings.
 	 * @private
 	 * @param {Object} defaults Default settings.
 	 * @param {Object} options  User settings.
@@ -53,132 +53,171 @@
 	};
 
 	/**
-	 * Returns the dropdown button element needed for the menu.
+	 * Updates the `button` element used for toggling the display of the menu.
+	 * @private
 	 */
-	const getDropdownButton = () => {
+	const updateMenuToggle = () => {
+		const menuToggle = settings.nav.querySelector( '.menu-toggle' );
 
-		const dropdownButton = document.createElement( 'button' );
+		menuToggle.classList.add( 'js-menu-toggle' );
 
-		dropdownButton.classList.add( 'dropdown-toggle' , 'js-dropdown-toggle' );
+		menuToggle.setAttribute( 'aria-expanded', 'false' );
 
 		// Revisit for translation and internationalization.
-		dropdownButton.setAttribute( 'aria-label', 'Expand child menu' );
+		menuToggle.setAttribute( 'aria-label', 'Open menu' );
+	};
 
-		dropdownButton.setAttribute( 'aria-expanded', 'false' );
+	/**
+	 * Returns the `button` element to use for toggling the display of submenus.
+	 * @private
+	 */
+	const getSubmenuToggle = () => {
 
-		return dropdownButton;
+		const toggleButton = document.createElement( 'button' );
+
+		toggleButton.classList.add( 'submenu-toggle' , 'js-submenu-toggle' );
+
+		// Revisit for translation and internationalization.
+		toggleButton.setAttribute( 'aria-label', 'Open child menu' );
+
+		toggleButton.setAttribute( 'aria-expanded', 'false' );
+
+		return toggleButton;
 
 	};
 
 	/**
-	 * Adjusts the navigation markup to be more accessible.
+	 * Adds `button` elements for toggling the display of submenus.
 	 * @private
 	 */
-	const accessibleNav = () => {
+	const addSubmenuToggles = () => {
 
 		const menu = settings.nav.querySelector( 'ul' );
 
 		// Get the submenus.
 		const submenus = menu.querySelectorAll( 'ul' );
 
-		// No point if no submenus.
+		// Return early if there are no submenus.
 		if ( ! submenus.length ) return;
 
-		// Create the dropdown button.
-		const dropdownButton = getDropdownButton();
+		// Create the toggle button.
+		const toggleButton = getSubmenuToggle();
 
+		// Add a toggle button for each submenu.
 		submenus.forEach( ( submenu ) => {
-			const parentMenuItem = submenu.parentNode;
-			let dropdown = parentMenuItem.querySelector( '.js-dropdown-toggle' );
+			if ( submenu.parentNode.querySelector( '.js-submenu-toggle' ) ) return;
 
-			// If no dropdown, create one.
-			if ( ! dropdown ) {
-				const thisDropdownButton = dropdownButton.cloneNode( true );
-
-				// Add before submenu.
-				submenu.parentNode.insertBefore( thisDropdownButton, submenu );
-			}
+			submenu.parentNode.insertBefore( toggleButton.cloneNode( true ), submenu );
 		} );
 
-		menu.classList.add( 'has-dropdown-toggle' );
+		menu.classList.add( 'has-submenu-toggle' );
 
 	};
 
 	/**
-	 * Initialize the mobile menu toggle button.
-	 */
-	const toggleNav = () => {
-
-		const menuToggle = settings.nav.querySelector( '.menu-toggle' );
-
-		// Return early if there is no menu toggle button.
-		if ( !menuToggle ) return;
-
-		menuToggle.setAttribute( 'aria-expanded', 'false' );
-
-		// Revisit for translation and internationalization.
-		menuToggle.setAttribute( 'aria-label', 'Open menu' );
-
-		menuToggle.addEventListener( 'click', () => {
-			settings.nav.classList.toggle( 'toggled-on' );
-
-			const expanded = 'false' === menuToggle.getAttribute( 'aria-expanded' ) ? 'true' : 'false';
-			const label = 'Open menu' === menuToggle.getAttribute( 'aria-label' ) ? 'Close menu' : 'Open menu';
-
-			menuToggle.setAttribute( 'aria-expanded', expanded );
-			menuToggle.setAttribute( 'aria-label', label );
-
-			document.body.classList.toggle( 'menu-toggled-on' );
-		}, false );
-
-	};
-
-	/**
-	 * Sets the minimum height on both the `main` and `nav` elements.
+	 * Toggles classes and attributes used for handling the display of the menu.
 	 * @private
+	 * @param {Event}  event    The click event target.
+	 * @param {String} expanded The updated value for the `aria-expanded` attribute.
 	 */
-	const setMinHeight = () => {
+	const toggleMenu = ( target, expanded ) => {
 
-		if ( !settings.minHeights ) return;
-
-		if ( settings.breakpoint && settings.breakpoint > window.innerWidth ) {
-			settings.nav.removeAttribute( 'style' );
-			return;
-		}
-
-		const navHeight = settings.nav.querySelector( 'ul' ).scrollHeight;
-		const windowHeight = window.innerHeight;
-		const minHeight = ( navHeight > windowHeight )
-			? navHeight + 'px'
-			: windowHeight + 'px';
-
-		settings.main.style.minHeight = minHeight;
-		settings.nav.style.minHeight = minHeight;
-
-	};
-
-	/**
-	 * Toggles the `open` class for list items containing child lists.
-	 * @private
-	 * @param {Event} event The click event.
-	 */
-	const toggleSection = ( event ) => {
-
-		const target = event.target;
-
-		// Bail if the click isn't on a dropdown toggle button.
-		if ( !target.classList.contains( 'js-dropdown-toggle' ) ) return;
-
-		// Toggle the `open` class on the parent `li`.
-		target.parentNode.classList.toggle( 'toggled-open' );
-
-		const expanded = 'false' === target.getAttribute( 'aria-expanded' ) ? 'true' : 'false';
+		const label = ( 'Open menu' === target.getAttribute( 'aria-label' ) )
+			? 'Close menu'
+			: 'Open menu';
 
 		target.setAttribute( 'aria-expanded', expanded );
 
-		setMinHeight();
+		target.setAttribute( 'aria-label', label );
+
+		document.body.classList.toggle( 'menu-toggled-open' );
+
+		settings.nav.classList.toggle( 'toggled-open' );
+
+	};
+
+	/**
+	 * Toggles classes and attributes used for handling the display of submenus.
+	 * @private
+	 * @param {Event}  target   The click event target.
+	 * @param {String} expanded The updated value for the `aria-expanded` attribute.
+	 */
+	const toggleSubmenu = ( target, expanded ) => {
+
+		const label = ( 'Open child menu' === target.getAttribute( 'aria-label' ) )
+			? 'Close child menu'
+			: 'Open child menu';
+
+		target.setAttribute( 'aria-expanded', expanded );
+
+		target.setAttribute( 'aria-label', label );
+
+		target.parentNode.classList.toggle( 'toggled-open' );
+
+		resizeHandler();
 
 		positionNav();
+
+	};
+
+	/**
+	 * Handles click events on the navigation element.
+	 * @private
+	 * @param {Event} event The click event.
+	 */
+	const clickHandler = ( event ) => {
+
+		const target = event.target;
+		const expanded = ( 'false' === target.getAttribute( 'aria-expanded' ) )
+			? 'true'
+			: 'false';
+
+		if ( target.classList.contains( 'js-menu-toggle' ) ) {
+			toggleMenu( target, expanded );
+		}
+
+		if ( target.classList.contains( 'js-submenu-toggle' ) ) {
+			toggleSubmenu( target, expanded );
+		}
+
+	};
+
+	/**
+	 * Ensures that the appropriate attributes and classes are in place
+	 * on either side of the mobile styling breakpoint.
+	 * @private
+	 */
+	const resizeHandler = () => {
+
+		// Return early if there is no breakpoint setting.
+		if ( !settings.breakpoint ) return;
+
+		if ( settings.breakpoint > window.innerWidth ) {
+			settings.main.style.minHeight = '';
+			settings.nav.style.minHeight = '';
+		} else {
+			settings.nav.classList.remove( 'toggled-open' );
+			document.body.classList.remove( 'menu-toggled-open' );
+
+			const menuToggle = settings.nav.querySelector( '.menu-toggle' );
+
+			if ( menuToggle ) {
+				menuToggle.setAttribute( 'aria-expanded', 'false' );
+				menuToggle.setAttribute( 'aria-label', 'Open menu' );
+			}
+
+			// Set `min-height` values for both the `main` and `nav` elements if appropriate.
+			if ( 'vertical' === settings.orientation && settings.minHeights ) {
+				const navHeight = settings.nav.querySelector( 'ul' ).scrollHeight;
+				const windowHeight = window.innerHeight;
+				const minHeight = ( navHeight > windowHeight )
+					? navHeight + 'px'
+					: windowHeight + 'px';
+
+				settings.main.style.minHeight = minHeight;
+				settings.nav.style.minHeight = minHeight;
+			}
+		}
 
 	};
 
@@ -244,10 +283,10 @@
 		if ( !settings ) return;
 
 		// Remove event listeners.
-		settings.element.removeEventListener( 'click', toggleSection, false );
+		settings.nav.removeEventListener( 'click', clickHandler, false );
 
 		if ( 'vertical' === settings.orientation ) {
-			window.addEventListener( 'resize', setMinHeight, true );
+			window.addEventListener( 'resize', resizeHandler, true );
 			window.removeEventListener( 'scroll', positionNav, true );
 		}
 
@@ -279,16 +318,19 @@
 		// Merge user options with defaults.
 		settings = extendDefaults( defaults, options || {} );
 
-		accessibleNav();
+		updateMenuToggle();
 
-		toggleNav();
+		addSubmenuToggles();
+
+		resizeHandler();
 
 		// Listen for click events on the navigation element.
-		settings.nav.addEventListener( 'click', toggleSection, false );
+		settings.nav.addEventListener( 'click', clickHandler, false );
+
+		// Listen for resize events.
+		window.addEventListener( 'resize', resizeHandler, true );
 
 		if ( 'vertical' === settings.orientation ) {
-			setMinHeight();
-			window.addEventListener( 'resize', setMinHeight, true );
 			window.addEventListener( 'scroll', scrollHandler, true );
 		}
 
