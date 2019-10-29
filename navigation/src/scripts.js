@@ -102,7 +102,36 @@
 
 		menu.classList.add( 'has-dropdown-toggle' );
 
-	}
+	};
+
+	/**
+	 * Initialize the mobile menu toggle button.
+	 */
+	const toggleNav = () => {
+
+		const menuToggle = settings.nav.querySelector( '.menu-toggle' );
+
+		// Return early if there is no menu toggle button.
+		if ( !menuToggle ) return;
+
+		menuToggle.setAttribute( 'aria-expanded', 'false' );
+
+		// Revisit for translation and internationalization.
+		menuToggle.setAttribute( 'aria-label', 'Open menu' );
+
+		menuToggle.addEventListener( 'click', () => {
+			settings.nav.classList.toggle( 'toggled-on' );
+
+			const expanded = 'false' === menuToggle.getAttribute( 'aria-expanded' ) ? 'true' : 'false';
+			const label = 'Open menu' === menuToggle.getAttribute( 'aria-label' ) ? 'Close menu' : 'Open menu';
+
+			menuToggle.setAttribute( 'aria-expanded', expanded );
+			menuToggle.setAttribute( 'aria-label', label );
+
+			document.body.classList.toggle( 'menu-toggled-on' );
+		}, false );
+
+	};
 
 	/**
 	 * Sets the minimum height on both the `main` and `nav` elements.
@@ -251,6 +280,8 @@
 		settings = extendDefaults( defaults, options || {} );
 
 		accessibleNav();
+
+		toggleNav();
 
 		// Listen for click events on the navigation element.
 		settings.nav.addEventListener( 'click', toggleSection, false );

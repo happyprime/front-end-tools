@@ -5,6 +5,7 @@
 		<title>Vertical Navigation - Front-end Tools</title>
 		<link rel="stylesheet" href="../../css/reset.css">
 		<link rel="stylesheet" href="../../css/common.css">
+		<link rel="stylesheet" href="../src/mobile.css">
 		<link rel="stylesheet" href="../src/vertical.css">
 	</head>
 	<body>
@@ -67,6 +68,9 @@ navigation.init( {
 		</main>
 
 		<nav id="nav">
+
+			<button class="menu-toggle">Menu</button>
+
 			<ul>
 				<li><a href="../../">Front-end Tools</a></li>
 				<li>
@@ -176,14 +180,17 @@ navigation.init( {
 				<li><a href="#">Link 1</a></li>
 				<li><a href="#">Link 2</a></li>
 			</ul>
+
 		</nav>
+
 		<script src="../dist/scripts.js"></script>
 		<script>
 			navigation.init( {
 				breakpoint: 960,
 				main: document.getElementById( 'main' ),
-				nav: document.getElementById( 'nav' ),
+				nav: document.getElementById( 'nav' )
 			} );
 		</script>
+
 	</body>
 </html>

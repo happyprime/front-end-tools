@@ -1,0 +1,72 @@
+/* Prevent the body from scrolling when the menu is toggled on. */
+body.menu-toggled-on {
+	overflow-y: hidden;
+}
+
+#nav {
+	background: #000;
+	position: fixed;
+	top: 0;
+	z-index: 100;
+}
+
+#nav.toggled-on {
+	height: 100%;
+	overflow-y: scroll;
+	width: 100%;
+}
+
+#nav a {
+	color: #fff;
+}
+
+#nav ul {
+	list-style: none;
+	padding-left: 20px;
+}
+
+#nav > ul {
+	display: none;
+	margin: 0;
+	padding: 20px;
+}
+
+#nav.toggled-on > ul {
+	display: block;
+}
+
+#nav .has-dropdown-toggle ul {
+	display: none;
+}
+
+#nav .toggled-open > ul {
+	display: block;
+}
+
+#nav li {
+	position: relative;
+}
+
+#nav .dropdown-toggle {
+	background: transparent;
+	border: none;
+	display: flex;
+	height: 1em;
+	justify-content: center;
+	padding: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 1em;
+}
+
+#nav .dropdown-toggle::before {
+	color: #fff;
+	content: '+';
+	line-height: 1;
+	transition: transform .2s ease;
+}
+
+#nav .toggled-open > .dropdown-toggle::before {
+	transform: rotate(45deg);
+}
