@@ -110,7 +110,7 @@
 			submenu.parentNode.insertBefore( toggleButton.cloneNode( true ), submenu );
 		} );
 
-		menu.classList.add( 'has-submenu-toggle' );
+		menu.classList.add( 'js-has-submenu-toggle' );
 
 	};
 
@@ -274,6 +274,34 @@
 	};
 
 	/**
+	 * Toggles the `focus` class for menu items with submenus.
+	 * @private
+	 * @param {Event} event The focus or blur event.
+	 */
+	const focusHandler = ( event ) => {
+
+		if ( 'A' !== event.target.tagName ) return;
+
+		let item = event.target;
+
+		while ( !item.classList.contains( 'js-has-submenu-toggle' ) ) {
+
+			// Toggle the `focus` class on `li` elements.
+			if ( 'LI' === item.tagName ) {
+				if ( item.classList.contains( 'focus' ) ) {
+					item.classList.remove( 'focus' )
+				} else {
+					item.classList.add( 'focus' )
+				}
+			}
+
+			item = item.parentElement;
+
+		}
+
+	};
+
+	/**
 	 * Destroys the current initialization.
 	 * @public
 	 */
@@ -334,8 +362,13 @@
 			window.addEventListener( 'scroll', scrollHandler, true );
 		}
 
+		if ( 'horizontal' === settings.orientation ) {
+			settings.nav.addEventListener( 'focus', focusHandler, true );
+			settings.nav.addEventListener( 'blur', focusHandler, true );
+		}
+
 	};
 
 	return navigation;
 
-});
+} );
