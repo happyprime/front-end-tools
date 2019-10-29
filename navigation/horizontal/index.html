@@ -5,6 +5,7 @@
 		<title>Horizontal Navigation - Front-end Tools</title>
 		<link rel="stylesheet" href="../../css/reset.css">
 		<link rel="stylesheet" href="../../css/common.css">
+		<link rel="stylesheet" href="../src/mobile.css">
 		<link rel="stylesheet" href="../src/horizontal.css">
 	</head>
 	<body>
@@ -12,6 +13,9 @@
 		<a href="#main" class="screen-reader-shortcut">Skip to main content</a>
 
 		<nav id="nav">
+
+			<button class="menu-toggle">Menu</button>
+
 			<ul>
 				<li><a href="../../">Front-end Tools</a></li>
 				<li><a href="#">Link 1</a>
@@ -55,6 +59,7 @@
 					</ul>
 				</li>
 			</ul>
+
 		</nav>
 
 		<main id="main">
@@ -66,6 +71,16 @@
 			</article>
 
 		</main>
+
+		<script src="../dist/scripts.js"></script>
+		<script>
+			navigation.init( {
+				breakpoint: 960,
+				main: document.getElementById( 'main' ),
+				nav: document.getElementById( 'nav' ),
+				orientation: 'horizontal'
+			} );
+		</script>
 
 	</body>
 </html>

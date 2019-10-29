@@ -1,41 +1,25 @@
-#nav {
-	background: #000;
-}
+@media (min-width: 960px) {
 
-#nav a {
-	color: #fff;
-}
+	#nav {
+		bottom: 0;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		width: 200px;
+	}
 
-#nav {
-	bottom: 0;
-	height: 100%;
-	position: fixed;
-	top: 0;
-	width: 200px;
-	z-index: 1;
-}
+	#nav .menu-toggle {
+		display: none;
+	}
 
-#nav ul {
-	list-style: none;
-	padding-left: 20px;
-}
+	#nav ul {
+		display: block;
+	}
 
-#nav > ul {
-	margin: 0;
-	padding: 20px;
-}
+	main {
+		margin-left: 200px;
+	}
 
-#nav ul ul {
-	display: none;
-}
-
-#nav ul li.open > ul {
-	display: block;
-}
-
-main {
-	margin-left: 200px;
-	padding: 40px;
 }
 
 .placeholder-content {

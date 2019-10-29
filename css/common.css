@@ -21,6 +21,10 @@ body {
 	font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
 }
 
+main {
+	padding: 40px;
+}
+
 article {
 	max-width: 80ch;
 }

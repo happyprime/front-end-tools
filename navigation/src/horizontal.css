@@ -1,40 +1,23 @@
-#nav {
-	background: #000;
-	display: block;
-	align-items: center;
-	justify-content: flex-end;
-	width: 100%;
-}
+@media (min-width: 960px) {
 
-#nav ul {
-	display: none;
-	list-style: none;
-	margin: 0;
-	padding-left: 0;
-}
-
-#nav li {
-	position: relative;
-}
-
-#nav a {
-	color: #fff;
-}
-
-@media screen and (min-width: 40em) {
 	#nav {
 		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		position: relative;
+		width: 100%;
+	}
+
+	#nav .menu-toggle {
+		display: none;
+	}
+
+	#nav ul {
+		padding: 0;
 	}
 
 	#nav > ul {
 		display: flex;
-	}
-
-	#nav > ul > li > a {
-		margin-bottom: -1px;
-		padding: .5em 1em;
-		position: relative;
-		z-index: 2;
 	}
 
 	#nav ul ul {
@@ -50,13 +33,36 @@
 		z-index: -2;
 	}
 
+	#nav .has-dropdown-toggle ul {
+		display: block;
+	}
+
+	#nav li {
+		position: relative;
+	}
+
+	#nav a {
+		color: #fff;
+	}
+
+	#nav .dropdown-toggle {
+		display: none;
+	}
+
+	#nav > ul > li > a {
+		display: block;
+		margin-bottom: -1px;
+		padding: .5em 1em;
+		z-index: 2;
+	}
+
 	#nav ul li:hover > ul,
 	#nav ul li.focus > ul {
 		left: auto;
 		transform: translateY(0);
 	}
 
-	.main-navigation ul ul li {
+	#nav ul ul li {
 		line-height: 1.15;
 	}
 }

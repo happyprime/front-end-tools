@@ -1,4 +1,4 @@
-(function (root, factory) {
+( ( root, factory ) => {
 	if ( typeof define === 'function' && define.amd ) {
 		define([], factory);
 	} else if ( typeof exports === 'object' ) {
@@ -6,7 +6,7 @@
 	} else {
 		root.navigation = factory();
 	}
-})(typeof self !== 'undefined' ? self : this, function () {
+} )( typeof self !== 'undefined' ? self : this, () => {
 
 	'use strict';
 
@@ -33,11 +33,118 @@
 	};
 
 	/**
+	 * Merges any user options with the default settings.
+	 * @private
+	 * @param {Object} defaults Default settings.
+	 * @param {Object} options  User settings.
+	 */
+	const extendDefaults = ( defaults, options ) => {
+
+		let property;
+
+		for ( property in options ) {
+			if ( Object.prototype.hasOwnProperty.call( options, property ) ) {
+				defaults[ property ] = options[ property ];
+			}
+		}
+
+		return defaults;
+
+	};
+
+	/**
+	 * Returns the dropdown button element needed for the menu.
+	 */
+	const getDropdownButton = () => {
+
+		const dropdownButton = document.createElement( 'button' );
+
+		dropdownButton.classList.add( 'dropdown-toggle' , 'js-dropdown-toggle' );
+
+		// Revisit for translation and internationalization.
+		dropdownButton.setAttribute( 'aria-label', 'Expand child menu' );
+
+		dropdownButton.setAttribute( 'aria-expanded', 'false' );
+
+		return dropdownButton;
+
+	};
+
+	/**
+	 * Adjusts the navigation markup to be more accessible.
+	 * @private
+	 */
+	const accessibleNav = () => {
+
+		const menu = settings.nav.querySelector( 'ul' );
+
+		// Get the submenus.
+		const submenus = menu.querySelectorAll( 'ul' );
+
+		// No point if no submenus.
+		if ( ! submenus.length ) return;
+
+		// Create the dropdown button.
+		const dropdownButton = getDropdownButton();
+
+		submenus.forEach( ( submenu ) => {
+			const parentMenuItem = submenu.parentNode;
+			let dropdown = parentMenuItem.querySelector( '.js-dropdown-toggle' );
+
+			// If no dropdown, create one.
+			if ( ! dropdown ) {
+				const thisDropdownButton = dropdownButton.cloneNode( true );
+
+				// Add before submenu.
+				submenu.parentNode.insertBefore( thisDropdownButton, submenu );
+			}
+		} );
+
+		menu.classList.add( 'has-dropdown-toggle' );
+
+	};
+
+	/**
+	 * Initialize the mobile menu toggle button.
+	 */
+	const toggleNav = () => {
+
+		const menuToggle = settings.nav.querySelector( '.menu-toggle' );
+
+		// Return early if there is no menu toggle button.
+		if ( !menuToggle ) return;
+
+		menuToggle.setAttribute( 'aria-expanded', 'false' );
+
+		// Revisit for translation and internationalization.
+		menuToggle.setAttribute( 'aria-label', 'Open menu' );
+
+		menuToggle.addEventListener( 'click', () => {
+			settings.nav.classList.toggle( 'toggled-on' );
+
+			const expanded = 'false' === menuToggle.getAttribute( 'aria-expanded' ) ? 'true' : 'false';
+			const label = 'Open menu' === menuToggle.getAttribute( 'aria-label' ) ? 'Close menu' : 'Open menu';
+
+			menuToggle.setAttribute( 'aria-expanded', expanded );
+			menuToggle.setAttribute( 'aria-label', label );
+
+			document.body.classList.toggle( 'menu-toggled-on' );
+		}, false );
+
+	};
+
+	/**
 	 * Sets the minimum height on both the `main` and `nav` elements.
 	 * @private
 	 */
-	const setMinHeight = function () {
+	const setMinHeight = () => {
+
 		if ( !settings.minHeights ) return;
+
+		if ( settings.breakpoint && settings.breakpoint > window.innerWidth ) {
+			settings.nav.removeAttribute( 'style' );
+			return;
+		}
 
 		const navHeight = settings.nav.querySelector( 'ul' ).scrollHeight;
 		const windowHeight = window.innerHeight;
@@ -47,44 +154,42 @@
 
 		settings.main.style.minHeight = minHeight;
 		settings.nav.style.minHeight = minHeight;
-	}
+
+	};
 
 	/**
 	 * Toggles the `open` class for list items containing child lists.
 	 * @private
 	 * @param {Event} event The click event.
 	 */
-	const toggleSection = function ( event ) {
+	const toggleSection = ( event ) => {
+
 		const target = event.target;
 
-		// Bail if the click isn't on an anchor.
-		if ( !( target instanceof HTMLAnchorElement ) ) {
-			return;
-		}
+		// Bail if the click isn't on a dropdown toggle button.
+		if ( !target.classList.contains( 'js-dropdown-toggle' ) ) return;
 
-		// Bail if the anchor doesn't have any siblings.
-		// A quick and dirty way to determine if the nav item has a child list.
-		if ( !target.parentNode.children[1] ) {
-			return;
-		}
+		// Toggle the `open` class on the parent `li`.
+		target.parentNode.classList.toggle( 'toggled-open' );
 
-		// Don't follow the link.
-		event.preventDefault();
+		const expanded = 'false' === target.getAttribute( 'aria-expanded' ) ? 'true' : 'false';
 
-		// Toggle the `open` class in the anchors parent li.
-		target.parentNode.classList.toggle( 'open' );
+		target.setAttribute( 'aria-expanded', expanded );
 
 		setMinHeight();
 
 		positionNav();
+
 	};
 
 	/**
 	 * Ensures proper positioning of the navigation when the page scrolled.
 	 * @private
 	 */
-	const positionNav = function () {
-		const windowTop = window.scrollY;
+	const positionNav = () => {
+
+		const windowTop = window.pageYOffset;
+		const bottomedOut = ( window.innerHeight + windowTop ) >= document.body.offsetHeight;
 		const scrollDiff = navScrollState.top - windowTop;
 		const upperBound = ( settings.nav.scrollHeight - window.innerHeight ) * -1;
 
@@ -101,7 +206,7 @@
 
 		// If the position is outside of the upper bound, reset it to the upper bound.
 		// This prevents scrolling too far down.
-		if ( position < upperBound ) {
+		if ( position < upperBound || bottomedOut ) {
 			position = upperBound;
 		}
 
@@ -109,31 +214,31 @@
 		navScrollState.top = windowTop;
 
 		settings.nav.style.top = position + 'px';
+
 	};
 
 	/**
-	 * Merge any user options with the default settings.
+	 * Ensures that the `positionNav` function fires only when needed,
+	 * and uses the `requestAnimationFrame` method for optimal performance.
 	 * @private
-	 * @param {Object} defaults Default settings.
-	 * @param {Object} options  User settings.
 	 */
-	const extendDefaults = function( defaults, options ) {
-		var property;
+	const scrollHandler = () => {
 
-		for ( property in options ) {
-			if ( Object.prototype.hasOwnProperty.call( options, property ) ) {
-				defaults[ property ] = options[ property ];
-			}
+		if (
+			( !settings.breakpoint || settings.breakpoint < window.innerWidth )
+			&& settings.main.offsetHeight > settings.nav.scrollHeight
+			&& window.innerHeight < ( settings.nav.scrollHeight + settings.position )
+		) {
+			requestAnimationFrame( positionNav );
 		}
 
-		return defaults;
-	}
+	};
 
 	/**
-	 * Destroy the current initialization.
+	 * Destroys the current initialization.
 	 * @public
 	 */
-	navigation.destroy = function () {
+	navigation.destroy = () => {
 
 		// If plugin isn't already initialized, stop.
 		if ( !settings ) return;
@@ -142,10 +247,8 @@
 		settings.element.removeEventListener( 'click', toggleSection, false );
 
 		if ( 'vertical' === settings.orientation ) {
-			document.removeEventListener( 'wheel', positionNav, {
-				capture: true,
-				passive: true
-			} );
+			window.addEventListener( 'resize', setMinHeight, true );
+			window.removeEventListener( 'scroll', positionNav, true );
 		}
 
 		// Reset variables.
@@ -154,7 +257,7 @@
 	};
 
 	/**
-	 * Initialize Plugin.
+	 * Initializes the plugin.
 	 *
 	 * @public
 	 * @param {Object}  options             User settings.
@@ -165,7 +268,7 @@
 	 * @param {String}  options.orientation The orientation of the navigation. Accepts `vertical` or `horizontal`. Defaults to `vertical`.
 	 * @param {Number}  options.position    Initial `top` value of the navigation element from CSS, if set. Defaults to `0`.
 	 */
-	navigation.init = function ( options ) {
+	navigation.init = ( options ) => {
 
 		// Check for required settings.
 		if ( !options.nav || !options.main ) return;
@@ -176,37 +279,19 @@
 		// Merge user options with defaults.
 		settings = extendDefaults( defaults, options || {} );
 
+		accessibleNav();
+
+		toggleNav();
+
 		// Listen for click events on the navigation element.
 		settings.nav.addEventListener( 'click', toggleSection, false );
 
 		if ( 'vertical' === settings.orientation ) {
-			document.addEventListener(
-				'wheel',
-				function () {
-					// Stop if the window is narrower than the set breakpoint.
-					if (
-						settings.breakpoint && settings.breakpoint > window.innerWidth
-						|| settings.main.offsetHeight < settings.nav.scrollHeight
-						|| window.innerHeight > ( settings.nav.scrollHeight + settings.position )
-						|| settings.position < settings.nav.getBoundingClientRect().top
-					) {
-						settings.nav.removeAttribute( 'style' );
-						return;
-					}
-
-					requestAnimationFrame( positionNav );
-				},
-				{
-					capture: true,
-					passive: true
-				}
-			);
-
-
 			setMinHeight();
-
-			window.addEventListener( 'resize', setMinHeight );
+			window.addEventListener( 'resize', setMinHeight, true );
+			window.addEventListener( 'scroll', scrollHandler, true );
 		}
+
 	};
 
 	return navigation;
