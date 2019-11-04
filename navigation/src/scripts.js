@@ -23,13 +23,13 @@
 		nav: null,
 		orientation: 'vertical',
 		position: 0,
-		minHeights: true,
+		minHeights: true
 	};
 
 	// Object for keeping track of the `nav` element's scroll state.
 	const navScrollState = {
 		position: 0,
-		top: 0,
+		top: 0
 	};
 
 	/**
@@ -315,7 +315,7 @@
 
 		if ( 'vertical' === settings.orientation ) {
 			window.addEventListener( 'resize', resizeHandler, true );
-			window.removeEventListener( 'scroll', positionNav, true );
+			window.removeEventListener( 'scroll', scrollHandler, true );
 		}
 
 		// Reset variables.
