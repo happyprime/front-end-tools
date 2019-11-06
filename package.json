@@ -5,8 +5,8 @@
 	"repository": "https://github.com/happyprime/front-end-tools",
 	"license": "GPL-3.0",
 	"scripts": {
-		"start": "babel ./**/src/*.js -w -d ./**/dist/",
-		"build": "babel ./**/src/*.js -d ./**/dist/",
+		"start": "babel ./**/src/*.js -w -d ../dist/ --relative",
+		"build": "babel ./**/src/*.js -d ../dist/ --relative",
 		"lint:css": "stylelint ./**/src/*.css",
 		"lint:js": "eslint ./**/src"
 	},
