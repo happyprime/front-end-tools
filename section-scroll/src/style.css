@@ -9,7 +9,7 @@
 }
 
 .scrolling-sections > div {
-	transition: transform 1s ease;
+	transition-property: transform;
 }
 
 .scrolling-sections article,

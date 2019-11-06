@@ -19,7 +19,8 @@
 	// Default settings.
 	const defaults = {
 		scrollableSection: document.querySelector( '.scrolling-sections' ),
-		articlesContainer: document.querySelector( '.scrolling-sections > div' )
+		transitionDuration: '1s',
+		transitionTimingFunction: 'ease'
 	};
 
 	// Object for keeping track of the user is in a scrollable section.
@@ -50,7 +51,7 @@
 
 	/**
 	 * Attempts to find full-height scrollable articles,
-	 * and set an inline `height` on the section wrapper.
+	 * and set inline styles required for the animation.
 	 * @private
 	 */
 	const getArticles = () => {
@@ -64,6 +65,12 @@
 		state.articles = articles;
 
 		settings.scrollableSection.style.height = '100vh';
+
+		settings.articlesContainer = settings.scrollableSection.querySelector( 'div' );
+
+		settings.articlesContainer.style.transitionTimingFunction = settings.transitionTimingFunction;
+
+		settings.articlesContainer.style.transitionDuration = settings.transitionDuration;
 
 	};
 
@@ -163,9 +170,10 @@
 	 * Initializes the plugin.
 	 *
 	 * @public
-	 * @param {Object}  options                   User settings.
-	 * @param {Object}  options.scrollableSection The scrollable section. Defaults to `document.querySelector( '.scrolling-sections' )`.
-	 * @param {Object}  options.articlesContainer The article container within the scrollable section. Defaults to `document.querySelector( '.scrolling-sections > div' )`.
+	 * @param {Object} options                          User settings.
+	 * @param {Object} options.scrollableSection        The scrollable section. Defaults to `document.querySelector( '.scrolling-sections' )`.
+	 * @param {String} options.transitionDuration       The scroll animation duration. Defaults to `1s`.
+	 * @param {String} options.transitionTimingFunction The scroll animation timing function. Defaults to `ease`.
 	 */
 	sectionScroll.init = ( options ) => {
 
