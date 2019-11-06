@@ -1,20 +1,17 @@
 ( ( root, factory ) => {
 	if ( typeof define === 'function' && define.amd ) {
-		define( [], factory );
+		define( ['wheel-indicator'], factory );
 	} else if ( typeof exports === 'object' ) {
-		module.exports = factory();
+		module.exports = factory( require( 'wheel-indicator' ) );
 	} else {
-		root.sectionScroll = factory();
+		root.sectionScroll = factory( root.WheelIndicator );
 	}
-} )( typeof self !== 'undefined' ? self : this, () => {
+} )( typeof self !== 'undefined' ? self : this, ( WheelIndicator ) => {
 
 	'use strict';
 
 	// Object for public APIs.
 	const sectionScroll = {};
-
-	// Placeholder for defaults merged with user settings.
-	let settings;
 
 	// Default settings.
 	const defaults = {
@@ -28,6 +25,15 @@
 		index: 0,
 		articles: null
 	};
+
+	// Placeholder for defaults merged with user settings.
+	let settings;
+
+	// Placeholder for setting up the `wheel` event listener.
+	let wheelHandler;
+
+	// Placeholder for the scrollable section `article` container element.
+	let articlesContainer;
 
 	/**
 	 * Merges user options with the default settings.
@@ -66,11 +72,11 @@
 
 		settings.scrollableSection.style.height = '100vh';
 
-		settings.articlesContainer = settings.scrollableSection.querySelector( 'div' );
+		articlesContainer = settings.scrollableSection.querySelector( 'div' );
 
-		settings.articlesContainer.style.transitionTimingFunction = settings.transitionTimingFunction;
+		articlesContainer.style.transitionTimingFunction = settings.transitionTimingFunction;
 
-		settings.articlesContainer.style.transitionDuration = settings.transitionDuration;
+		articlesContainer.style.transitionDuration = settings.transitionDuration;
 
 	};
 
@@ -83,6 +89,7 @@
 	const scrollSection = ( direction ) => {
 
 		if ( 'down' === direction && state.index + 1 >= state.articles.length ) {
+			wheelHandler.turnOff();
 			document.body.classList.remove( 'scroll-lock' );
 			return;
 		}
@@ -94,12 +101,14 @@
 			const sectionBounds = settings.scrollableSection.getBoundingClientRect();
 
 			if ( sectionBounds.top !== 0 ) {
+				wheelHandler.turnOff();
 				document.body.classList.remove( 'scroll-lock' );
 				return;
 			}
 
 		}
 
+		wheelHandler.turnOn();
 		document.body.classList.add( 'scroll-lock' );
 
 		let index = ( 'down' === direction )
@@ -108,24 +117,9 @@
 
 		const value = `translate3d(0px, -${ index * window.innerHeight }px, 0px)`;
 
-		settings.articlesContainer.style.transform = value;
+		articlesContainer.style.transform = value;
 
 		state.index = index;
-
-	};
-
-	/**
-	 * Handles scroll events fired by wheel/touchpad/etc.
-	 * @private
-	 * @param {Event} event The scroll event.
-	 */
-	const wheelHandler = ( event ) => {
-
-		const scrollDirection = ( event.deltaY > 0 )
-			? 'down'
-			: 'up';
-
-		requestAnimationFrame( () => scrollSection( scrollDirection ) );
 
 	};
 
@@ -156,8 +150,8 @@
 		if ( !settings ) return;
 
 		// Remove event listeners.
-		window.addEventListener( 'wheel', wheelHandler, true );
 		window.addEventListener( 'keydown', keyDownHandler, true );
+		wheelHandler.destroy();
 
 		// Reset variables.
 		settings = null;
@@ -189,11 +183,14 @@
 		// Return early if no articles were found.
 		if ( !state.articles ) return;
 
-		// Listen for wheel events - `scroll` doesn't fire due to styles on `body`.
-		window.addEventListener( 'wheel', wheelHandler, true );
-
 		// Listen for keydown events.
 		window.addEventListener( 'keydown', keyDownHandler, true );
+
+		// Use `wheel-indicator` to listen for wheel events.
+		wheelHandler = new WheelIndicator( {
+			elem: settings.scrollableSection,
+			callback: ( event ) => scrollSection( event.direction )
+		} );
 
 	};
 

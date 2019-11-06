@@ -10,6 +10,9 @@
 		"lint:css": "stylelint ./**/src/*.css",
 		"lint:js": "eslint ./**/src"
 	},
+	"dependencies": {
+		"wheel-indicator": "^1.2.2"
+	},
 	"devDependencies": {
 		"@babel/cli": "^7.6.4",
 		"@babel/core": "^7.6.4",
