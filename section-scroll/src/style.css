@@ -1,6 +1,15 @@
+.scroll-lock {
+	height: 100vh;
+	overflow: hidden;
+}
+
 .scrolling-sections {
 	margin: -40px 0 0 -40px; /* Specific overwrite for rules in common.css */
 	width: 100vw;
+}
+
+.scrolling-sections > div {
+	transition: transform 1s ease;
 }
 
 .scrolling-sections article,
