@@ -116,7 +116,7 @@
 
 		const value = `translate3d(0px, -${ index * window.innerHeight }px, 0px)`;
 
-		articlesContainer.style.transform = value;
+		requestAnimationFrame( () => articlesContainer.style.transform = value );
 
 		state.index = index;
 
