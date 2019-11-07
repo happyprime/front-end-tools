@@ -56,6 +56,18 @@
 	};
 
 	/**
+	 * Determines if the scrollable section is at the top of the viewport.
+	 * @private
+	 */
+	const sectionInViewport = () => {
+
+		const sectionBounds = settings.scrollableSection.getBoundingClientRect();
+
+		return sectionBounds.top === 0;
+
+	};
+
+	/**
 	 * Attempts to find full-height scrollable articles,
 	 * and set inline styles required for the animation.
 	 * @private
@@ -95,20 +107,14 @@
 		}
 
 		if ( 'up' === direction ) {
-
 			if ( state.index <= 0 ) return;
 
-			const sectionBounds = settings.scrollableSection.getBoundingClientRect();
-
-			if ( sectionBounds.top !== 0 ) {
+			if ( !sectionInViewport() ) {
 				wheelHandler.turnOff();
 				document.body.classList.remove( 'scroll-lock' );
 				return;
 			}
-
 		}
-
-		document.body.classList.add( 'scroll-lock' );
 
 		let index = ( 'down' === direction )
 			? state.index + 1
@@ -129,9 +135,15 @@
 	 */
 	const keyDownHandler = ( event ) => {
 
+		if ( !sectionInViewport() ) return;
+
 		const keys = [ 'ArrowDown', 'ArrowUp', 'Space' ];
 
 		if ( !keys.includes( event.code ) ) return;
+
+		if ( !document.body.classList.contains( 'scroll-lock' ) ) {
+			document.body.classList.add( 'scroll-lock' );
+		}
 
 		const scrollDirection = ( 'ArrowUp' === event.code )
 			? 'up'
@@ -148,14 +160,10 @@
 	 */
 	const scrollHandler = () => {
 
-		requestAnimationFrame( () => {
-			const sectionBounds = settings.scrollableSection.getBoundingClientRect();
+		if ( !sectionInViewport() ) return;
 
-			if ( sectionBounds.top === 0 ) {
-				wheelHandler.turnOn();
-				document.body.classList.add( 'scroll-lock' );
-			}
-		} );
+		wheelHandler.turnOn();
+		document.body.classList.add( 'scroll-lock' );
 
 	};
 
