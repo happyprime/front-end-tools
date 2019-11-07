@@ -80,6 +80,10 @@
 
 		if ( !articles ) return;
 
+		if ( sectionInViewport() ) {
+			document.body.classList.add( 'scroll-lock' );
+		}
+
 		state.articles = articles;
 
 		settings.scrollableSection.style.height = '100vh';
@@ -100,29 +104,26 @@
 	 */
 	const scrollSection = ( direction ) => {
 
-		if ( 'down' === direction && state.index + 1 >= state.articles.length ) {
-			wheelHandler.turnOff();
+		if ( 'up' === direction && state.index <= 0 ) return;
+
+		if (
+			( 'down' === direction && state.index + 1 >= state.articles.length )
+			|| ( 'up' === direction && !sectionInViewport() )
+		) {
 			document.body.classList.remove( 'scroll-lock' );
+
+			wheelHandler.turnOff();
+
 			return;
 		}
 
-		if ( 'up' === direction ) {
-			if ( state.index <= 0 ) return;
-
-			if ( !sectionInViewport() ) {
-				wheelHandler.turnOff();
-				document.body.classList.remove( 'scroll-lock' );
-				return;
-			}
-		}
-
-		let index = ( 'down' === direction )
+		const index = ( 'down' === direction )
 			? state.index + 1
 			: state.index - 1;
 
 		const value = `translate3d(0px, -${ index * window.innerHeight }px, 0px)`;
 
-		requestAnimationFrame( () => articlesContainer.style.transform = value );
+		articlesContainer.style.transform = value;
 
 		state.index = index;
 
@@ -135,15 +136,9 @@
 	 */
 	const keyDownHandler = ( event ) => {
 
-		if ( !sectionInViewport() ) return;
-
 		const keys = [ 'ArrowDown', 'ArrowUp', 'Space' ];
 
-		if ( !keys.includes( event.code ) ) return;
-
-		if ( !document.body.classList.contains( 'scroll-lock' ) ) {
-			document.body.classList.add( 'scroll-lock' );
-		}
+		if ( !keys.includes( event.code ) || !sectionInViewport() ) return;
 
 		const scrollDirection = ( 'ArrowUp' === event.code )
 			? 'up'
@@ -162,8 +157,9 @@
 
 		if ( !sectionInViewport() ) return;
 
-		wheelHandler.turnOn();
 		document.body.classList.add( 'scroll-lock' );
+
+		wheelHandler.turnOn();
 
 	};
 
