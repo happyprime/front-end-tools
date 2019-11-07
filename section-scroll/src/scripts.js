@@ -123,17 +123,19 @@
 	};
 
 	/**
-	 * Handles scrolling via the up and down arrow keys.
+	 * Handles scrolling via the up and down arrow and space keys.
 	 * @private
 	 * @param {Event} event The keydown event.
 	 */
 	const keyDownHandler = ( event ) => {
 
-		if ( 'ArrowDown' !== event.code && 'ArrowUp' !== event.code ) return;
+		const keys = [ 'ArrowDown', 'ArrowUp', 'Space' ];
 
-		const scrollDirection = ( 'ArrowDown' === event.code )
-			? 'down'
-			: 'up';
+		if ( !keys.includes( event.code ) ) return;
+
+		const scrollDirection = ( 'ArrowUp' === event.code )
+			? 'up'
+			: 'down';
 
 		scrollSection( scrollDirection );
 
