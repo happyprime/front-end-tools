@@ -21,10 +21,3 @@
 	}
 
 }
-
-.placeholder-content {
-	align-items: center;
-	align-content: center;
-	display: flex;
-	min-height: calc(100vh - 80px);
-}
