@@ -108,7 +108,6 @@
 
 		}
 
-		wheelHandler.turnOn();
 		document.body.classList.add( 'scroll-lock' );
 
 		let index = ( 'down' === direction )
@@ -137,6 +136,24 @@
 			: 'up';
 
 		scrollSection( scrollDirection );
+
+	};
+
+	/**
+	 * Reenables wheelHandler if the top of the scrollable section
+	 * hits the top of the viewport when scrolling up.
+	 * @private
+	 */
+	const scrollHandler = () => {
+
+		requestAnimationFrame( () => {
+			const sectionBounds = settings.scrollableSection.getBoundingClientRect();
+
+			if ( sectionBounds.top === 0 ) {
+				wheelHandler.turnOn();
+				document.body.classList.add( 'scroll-lock' );
+			}
+		} );
 
 	};
 
@@ -191,6 +208,9 @@
 			elem: settings.scrollableSection,
 			callback: ( event ) => scrollSection( event.direction )
 		} );
+
+		// Listen for scroll events.
+		window.addEventListener( 'scroll', scrollHandler, true );
 
 	};
 
