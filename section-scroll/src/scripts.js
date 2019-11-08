@@ -20,20 +20,16 @@
 		transitionTimingFunction: 'ease'
 	};
 
-	// Object for keeping track of the user is in a scrollable section.
+	// Object for keeping track of where the user is in a scrollable section.
 	const state = {
+		articles: null,
+		container: null,
 		index: 0,
-		articles: null
+		wheelHandler: null
 	};
 
 	// Placeholder for defaults merged with user settings.
 	let settings;
-
-	// Placeholder for setting up the `wheel` event listener.
-	let wheelHandler;
-
-	// Placeholder for the scrollable section `article` container element.
-	let articlesContainer;
 
 	/**
 	 * Merges user options with the default settings.
@@ -80,19 +76,23 @@
 
 		if ( !articles ) return;
 
-		if ( sectionInViewport() ) {
-			document.body.classList.add( 'scroll-lock' );
-		}
-
 		state.articles = articles;
 
 		settings.scrollableSection.style.height = '100vh';
 
-		articlesContainer = settings.scrollableSection.querySelector( 'div' );
+		state.container = settings.scrollableSection.querySelector( 'div' );
 
-		articlesContainer.style.transitionTimingFunction = settings.transitionTimingFunction;
+		state.container.style.transitionTimingFunction = settings.transitionTimingFunction;
 
-		articlesContainer.style.transitionDuration = settings.transitionDuration;
+		state.container.style.transitionDuration = settings.transitionDuration;
+
+		if ( sectionInViewport() ) {
+			document.body.classList.add( 'scroll-lock' );
+		} else {
+			state.index = state.articles.length;
+
+			scrollSection();
+		}
 
 	};
 
@@ -106,13 +106,10 @@
 
 		if ( 'up' === direction && state.index <= 0 ) return;
 
-		if (
-			( 'down' === direction && state.index + 1 >= state.articles.length )
-			|| ( 'up' === direction && !sectionInViewport() )
-		) {
+		if ( 'down' === direction && state.index + 1 >= state.articles.length ) {
 			document.body.classList.remove( 'scroll-lock' );
 
-			wheelHandler.turnOff();
+			state.wheelHandler.turnOff();
 
 			return;
 		}
@@ -123,7 +120,7 @@
 
 		const value = `translate3d(0px, -${ index * window.innerHeight }px, 0px)`;
 
-		articlesContainer.style.transform = value;
+		state.container.style.transform = value;
 
 		state.index = index;
 
@@ -140,26 +137,26 @@
 
 		if ( !keys.includes( event.code ) || !sectionInViewport() ) return;
 
-		const scrollDirection = ( 'ArrowUp' === event.code )
+		const direction = ( 'ArrowUp' === event.code )
 			? 'up'
 			: 'down';
 
-		scrollSection( scrollDirection );
+		scrollSection( direction );
 
 	};
 
 	/**
-	 * Reenables wheelHandler if the top of the scrollable section
-	 * hits the top of the viewport when scrolling up.
+	 * Reenables `WheelIndicator` if the top of the scrollable section
+	 * hits the top of the viewport.
 	 * @private
 	 */
 	const scrollHandler = () => {
 
-		if ( !sectionInViewport() ) return;
+		if ( sectionInViewport() && !document.body.classList.contains( 'scroll-lock' ) ) {
+			document.body.classList.add( 'scroll-lock' );
 
-		document.body.classList.add( 'scroll-lock' );
-
-		wheelHandler.turnOn();
+			state.wheelHandler.turnOn();
+		}
 
 	};
 
@@ -174,7 +171,7 @@
 
 		// Remove event listeners.
 		window.addEventListener( 'keydown', keyDownHandler, true );
-		wheelHandler.destroy();
+		state.wheelHandler.destroy();
 
 		// Reset variables.
 		settings = null;
@@ -209,8 +206,8 @@
 		// Listen for keydown events.
 		window.addEventListener( 'keydown', keyDownHandler, true );
 
-		// Use `wheel-indicator` to listen for wheel events.
-		wheelHandler = new WheelIndicator( {
+		// Use `WheelIndicator` to listen for wheel events.
+		state.wheelHandler = new WheelIndicator( {
 			elem: settings.scrollableSection,
 			callback: ( event ) => scrollSection( event.direction )
 		} );
