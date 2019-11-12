@@ -5,6 +5,7 @@
 
 .scrolling-sections {
 	margin: -40px 0 0 -40px; /* Specific overwrite for rules in common.css */
+	overflow: hidden;
 	width: 100vw;
 }
 
@@ -15,16 +16,19 @@
 .scrolling-sections article,
 .scrolling-sections article > * {
 	height: 100vh;
+	position: relative;
 	width: 100%;
 }
 
-.scrolling-sections article > *:first-child {
+.scrolling-sections article > img {
 	object-fit: cover;
-	position: relative;
 }
 
 .scrolling-sections article > div {
-	margin-top: -100vh;
 	padding: 40px; /* Specific to match rules in common.css */
 	position: relative;
+}
+
+.scrolling-sections article > * + div {
+	margin-top: -100vh;
 }

@@ -20,6 +20,33 @@
 					<div>
 
 						<article>
+							<div>
+								<p><a href="../../">Back to Front-end Tools</a></p>
+								<h1>Section Scroller</h1>
+								<p>This is a plugin for scrolling smoothly between full-height sections of content.</p>
+								<p>Use your mouse, touchpad, up and down arrow keys, or space bar to scroll through the following sections!</p>
+								<h2>Usage</h2>
+								<p>Include the stylesheet and script on your page, and initialize the JavaScript with <code>sectionScroll.init();</code>.</p>
+								<p>Settings can be passed in to the plugin like so:</p>
+								<code>
+									<pre>
+sectionScroll.init( {
+	scrollableSection: document.querySelector( '.scrolling-sections' ),
+	transitionDuration: '1s',
+	transitionTimingFunction: 'ease',
+} );
+									</pre>
+								</code>
+								<p>The available settings are as follows:</p>
+								<ul>
+									<li><code>scrollableSection</code>: The element containing the scrollable sections. Defaults to <code>document.querySelector( '.scrolling-sections' )</code>.</li>
+									<li><code>transitionDuration</code>: The scroll animation <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transition-duration">duration</a>. Defaults to <code>1s</code>.</li>
+									<li><code>transitionTimingFunction</code>: The scroll animation <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function">timing function</a>. Defaults to <code>ease</code>.</li>
+								</ul>
+							</div>
+						</article>
+
+						<article>
 							<img
 								src="https://source.unsplash.com/featured/1600x900/?summer"
 								alt="A random summer photo"
