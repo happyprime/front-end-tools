@@ -13,32 +13,41 @@
 	// Object for public APIs.
 	const classChangeTrigger = {};
 
-	// Default settings.
-	const defaults = {};
-
-	// Placeholder for defaults merged with user settings.
+	// Placeholder for user settings.
 	let settings;
 
 	/**
-	 * Merges user options with the default settings.
+	 * Toggles a class on an element based on a trigger element's position
+	 * within the viewport for each user-defined set.
 	 *
 	 * @private
-	 * @param {Object} defaults Default settings.
-	 * @param {Object} options  User settings.
 	 */
-	const extendDefaults = ( defaults, options ) => {
+	const scrollHandler = () => {
 
-		let property;
+		requestAnimationFrame( () => {
+			settings.forEach( set => {
 
-		for ( property in options ) {
-			if ( Object.prototype.hasOwnProperty.call( options, property ) ) {
-				defaults[ property ] = options[ property ];
-			}
-		}
+				const triggerTop = set.trigger.getBoundingClientRect().top;
 
-		return defaults;
+				const distance = ( 'px' === set.unit )
+					? Math.round( triggerTop )
+					: Math.round( ( triggerTop / window.innerHeight ) * 100 );
+
+				if ( distance <= set.distance ) {
+					if ( ! set.target.classList.contains( set.class ) ) {
+						set.target.classList.add( set.class );
+					}
+				} else {
+					if ( set.target.classList.contains( set.class ) ) {
+						set.target.classList.remove( set.class );
+					}
+				}
+
+			} );
+		} );
 
 	};
+
 
 	/**
 	 * Destroys the current initialization.
@@ -50,7 +59,8 @@
 		// If plugin isn't already initialized, stop.
 		if ( !settings ) return;
 
-
+		// Remove event listeners.
+		window.removeEventListener( 'scroll', scrollHandler, true );
 
 		// Reset variables.
 		settings = null;
@@ -62,7 +72,7 @@
 	 *
 	 * @public
 	 *
-	 * @param {Object} options User settings.
+	 * @param {Array} options User settings. An array of objects defining `trigger`, `target`, `class`, `distance`, and `unit`.
 	 */
 	classChangeTrigger.init = ( options ) => {
 
@@ -70,7 +80,10 @@
 		classChangeTrigger.destroy();
 
 		// Merge user options with defaults.
-		settings = extendDefaults( defaults, options || {} );
+		settings = options;
+
+		// Listen for scroll events.
+		window.addEventListener( 'scroll', scrollHandler, true );
 
 	};
 
