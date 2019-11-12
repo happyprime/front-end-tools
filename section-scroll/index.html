@@ -9,19 +9,18 @@
 	</head>
 	<body>
 
-		<a href="#main" class="screen-reader-shortcut">Skip to main content</a>
-
 		<main id="main">
 
-			<article>
+			<a href="../"  class="home-link">&laquo; Front-end Tools</a>
+
+			<article class="centered">
 
 				<section class="scrolling-sections">
 
 					<div>
 
 						<article>
-							<div>
-								<p><a href="../../">Back to Front-end Tools</a></p>
+							<div class="article-content-flow">
 								<h1>Section Scroller</h1>
 								<p>This is a plugin for scrolling smoothly between full-height sections of content.</p>
 								<p>Use your mouse, touchpad, up and down arrow keys, or space bar to scroll through the following sections!</p>
@@ -29,13 +28,11 @@
 								<p>Include the stylesheet and script on your page, and initialize the JavaScript with <code>sectionScroll.init();</code>.</p>
 								<p>Settings can be passed in to the plugin like so:</p>
 								<code>
-									<pre>
-sectionScroll.init( {
+									<pre>sectionScroll.init( {
 	scrollableSection: document.querySelector( '.scrolling-sections' ),
 	transitionDuration: '1s',
 	transitionTimingFunction: 'ease',
-} );
-									</pre>
+} );</pre>
 								</code>
 								<p>The available settings are as follows:</p>
 								<ul>

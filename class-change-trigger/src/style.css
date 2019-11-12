@@ -1,12 +1,4 @@
-article {
-	padding-top: calc(24px - 1em); /* Offset the fixed position "« Back..." link. */
-}
-
 .home-link {
-	left: 0;
-	padding: 20px 40px;
-	position: fixed;
-	top: 0;
 	transition: all 250ms ease;
 }
 
