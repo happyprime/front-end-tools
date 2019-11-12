@@ -1,0 +1,13 @@
+.home-link {
+	transition: all 250ms ease;
+}
+
+.home-link.yellow {
+	background: #ffda00;
+	color: #3F403F;
+}
+
+.home-link.gray {
+	background: #3F403F;
+	color: #ffda00;
+}

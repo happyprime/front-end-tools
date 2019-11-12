@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Class Change Trigger - Front-end Tools</title>
+		<link rel="stylesheet" href="../css/reset.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" href="src/style.css">
+	</head>
+	<body>
+
+		<main id="main">
+
+			<a href="../"  class="home-link">&laquo; Front-end Tools</a>
+
+			<article class="centered">
+
+				<h1>Class Change Trigger</h1>
+
+				<p>This is a plugin that triggers a class change on an element based on a trigger element's position within the viewport.</p>
+
+				<h2>Usage</h2>
+
+				<p>Include the script on your page, and initialize it with <code>classChangeTrigger();</code>.
+
+				<p>An array of objects containing the trigger element, target element, class to apply, distance at which to apply the class, and distance unit can be passed in to the plugin initialization. For example, the code on this page is as follows:</p>
+
+				<code>
+						<pre>classChangeTrigger.init( [
+	{
+		trigger: document.querySelector( '.first-trigger' ),
+		target: document.querySelector( '.home-link' ),
+		class: 'yellow',
+		distance: '50',
+		unit: '%',
+	},
+	{
+		trigger: document.querySelector( '.second-trigger' ),
+		target: document.querySelector( '.home-link' ),
+		class: 'gray',
+		distance: '50',
+		unit: 'px',
+	}
+] );</pre>
+				</code>
+
+				<p>Scroll down to see it in action!</p>
+
+				<p class="first-trigger">When this element is 50% from the top of the viewport, the <code>yellow</code> class will be added to the "Front-end Tools" link.</p>
+
+				<p class="second-trigger">When this element is 50px from the top of the viewport, the <code>gray</code> class will be added to the "Front-end Tools" link.</p>
+
+				<p class="placeholder-content">Placeholder content</p>
+
+			</article>
+
+		</main>
+
+		<script src="dist/scripts.js"></script>
+		<script>
+			classChangeTrigger.init( [
+				{
+					trigger: document.querySelector( '.first-trigger' ),
+					target: document.querySelector( '.home-link' ),
+					class: 'yellow',
+					distance: '50',
+					unit: '%',
+				},
+				{
+					trigger: document.querySelector( '.second-trigger' ),
+					target: document.querySelector( '.home-link' ),
+					class: 'gray',
+					distance: '50',
+					unit: 'px',
+				}
+			] );
+		</script>
+
+	</body>
+</html>

@@ -12,8 +12,12 @@
 		display: none;
 	}
 
-	#nav ul {
+	#nav > ul {
 		display: block;
+	}
+
+	#nav li ul {
+		display: none;
 	}
 
 	main {
