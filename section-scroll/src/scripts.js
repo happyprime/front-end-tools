@@ -188,6 +188,18 @@
 	};
 
 	/**
+	 * Sets the value of a vh unit to 1% of the viewport height.
+	 * @private
+	 */
+	const setVhUnit = () => {
+
+		const vh = window.innerHeight * 0.01;
+
+		document.documentElement.style.setProperty( '--vh', `${vh}px` );
+
+	}
+
+	/**
 	 * Destroys the current initialization.
 	 * @public
 	 */
@@ -224,6 +236,9 @@
 		// Merge user options with defaults.
 		settings = extendDefaults( defaults, options || {} );
 
+		// Set the value of a vh unit to 1% of the viewport height.
+		setVhUnit();
+
 		// Attempt to find articles in a scrollable section.
 		getArticles();
 
@@ -252,6 +267,10 @@
 			state.touchEndY = event.changedTouches[0].screenY;
 			swipeHandler();
 		}, false );
+
+
+		// Listen for the resize events.
+		window.addEventListener( 'resize', setVhUnit );
 
 	};
 

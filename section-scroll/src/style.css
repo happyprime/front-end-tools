@@ -1,5 +1,6 @@
 .scroll-lock {
 	height: 100vh;
+	height: calc(var(--vh, 1vh) * 100);
 	overflow: hidden;
 }
 
@@ -16,6 +17,7 @@
 
 .scrolling-sections article {
 	height: 100vh;
+	height: calc(var(--vh, 1vh) * 100);
 	width: 100%;
 }
 
