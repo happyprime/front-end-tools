@@ -180,8 +180,8 @@
 		if ( !sectionInViewport() ) return;
 
 		const direction = ( state.touchEndY > state.touchStartY )
-			? 'down'
-			: 'up';
+			? 'up'
+			: 'down';
 
 		scrollSection( direction );
 
