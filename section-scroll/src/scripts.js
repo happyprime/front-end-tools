@@ -104,16 +104,25 @@
 	 */
 	const scrollSection = ( direction ) => {
 
+		// Return early if scrolling up and already on the first section.
 		if ( 'up' === direction && state.index <= 0 ) return;
 
+		// Return early if scrolling down and already on the last section.
 		if ( 'down' === direction && state.index + 1 >= state.articles.length ) {
-			document.body.classList.remove( 'scroll-lock' );
 
+			// Return now if there is no content after the Scrolling Sections block.
+			if ( !settings.scrollableSection.nextElementSibling ) return;
+
+			// If there is content after the Scrolling Sections block,
+			// remove the `scroll-lock` class from the body and disable
+			// `WheelIndicator` before returning.
+			document.body.classList.remove( 'scroll-lock' );
 			state.wheelHandler.turnOff();
 
 			return;
 		}
 
+		// Increment the index accordingly, then animate using inline styles.
 		const index = ( 'down' === direction )
 			? state.index + 1
 			: state.index - 1;
