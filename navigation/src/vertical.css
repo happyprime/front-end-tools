@@ -16,10 +16,6 @@
 		display: block;
 	}
 
-	#nav li ul {
-		display: none;
-	}
-
 	main {
 		margin-left: 200px;
 	}

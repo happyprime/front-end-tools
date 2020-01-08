@@ -25,6 +25,8 @@
 		articles: null,
 		container: null,
 		index: 0,
+		touchEndY: 0,
+		touchStartY: 0,
 		wheelHandler: null
 	};
 
@@ -104,16 +106,25 @@
 	 */
 	const scrollSection = ( direction ) => {
 
+		// Return early if scrolling up and already on the first section.
 		if ( 'up' === direction && state.index <= 0 ) return;
 
+		// Return early if scrolling down and already on the last section.
 		if ( 'down' === direction && state.index + 1 >= state.articles.length ) {
-			document.body.classList.remove( 'scroll-lock' );
 
+			// Return now if there is no content after the Scrolling Sections block.
+			if ( !settings.scrollableSection.nextElementSibling ) return;
+
+			// If there is content after the Scrolling Sections block,
+			// remove the `scroll-lock` class from the body and disable
+			// `WheelIndicator` before returning.
+			document.body.classList.remove( 'scroll-lock' );
 			state.wheelHandler.turnOff();
 
 			return;
 		}
 
+		// Increment the index accordingly, then animate using inline styles.
 		const index = ( 'down' === direction )
 			? state.index + 1
 			: state.index - 1;
@@ -157,6 +168,22 @@
 
 			state.wheelHandler.turnOn();
 		}
+
+	};
+
+	/**
+	 * Handles scrolling via swiping on a touch device.
+	 * @private
+	 */
+	const swipeHandler = () => {
+
+		if ( !sectionInViewport() ) return;
+
+		const direction = ( state.touchEndY > state.touchStartY )
+			? 'down'
+			: 'up';
+
+		scrollSection( direction );
 
 	};
 
@@ -214,6 +241,17 @@
 
 		// Listen for scroll events.
 		window.addEventListener( 'scroll', scrollHandler, true );
+
+		// Listen for touchstart events to set the starting point for a swipe.
+		settings.scrollableSection.addEventListener( 'touchstart', event => {
+			state.touchStartY = event.changedTouches[0].screenY;
+		}, false );
+
+		// Listen for touchend events to set the ending point for a swipe.
+		settings.scrollableSection.addEventListener( 'touchend', event => {
+			state.touchEndY = event.changedTouches[0].screenY;
+			swipeHandler();
+		}, false );
 
 	};
 
