@@ -14,9 +14,14 @@
 	transition-property: transform;
 }
 
-.scrolling-sections article,
-.scrolling-sections article > * {
+.scrolling-sections article {
 	height: 100vh;
+	width: 100%;
+}
+
+.scrolling-sections article > * {
+	height: 100%;
+	overflow: hidden;
 	position: relative;
 	width: 100%;
 }
