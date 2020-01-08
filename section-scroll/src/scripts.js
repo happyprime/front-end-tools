@@ -25,6 +25,8 @@
 		articles: null,
 		container: null,
 		index: 0,
+		touchEndY: 0,
+		touchStartY: 0,
 		wheelHandler: null
 	};
 
@@ -170,6 +172,22 @@
 	};
 
 	/**
+	 * Handles scrolling via swiping on a touch device.
+	 * @private
+	 */
+	const swipeHandler = () => {
+
+		if ( !sectionInViewport() ) return;
+
+		const direction = ( state.touchEndY > state.touchStartY )
+			? 'down'
+			: 'up';
+
+		scrollSection( direction );
+
+	};
+
+	/**
 	 * Destroys the current initialization.
 	 * @public
 	 */
@@ -223,6 +241,17 @@
 
 		// Listen for scroll events.
 		window.addEventListener( 'scroll', scrollHandler, true );
+
+		// Listen for touchstart events to set the starting point for a swipe.
+		settings.scrollableSection.addEventListener( 'touchstart', event => {
+			state.touchStartY = event.changedTouches[0].screenY;
+		}, false );
+
+		// Listen for touchend events to set the ending point for a swipe.
+		settings.scrollableSection.addEventListener( 'touchend', event => {
+			state.touchEndY = event.changedTouches[0].screenY;
+			swipeHandler();
+		}, false );
 
 	};
 
