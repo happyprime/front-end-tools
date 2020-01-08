@@ -110,7 +110,7 @@
 			submenu.parentNode.insertBefore( toggleButton.cloneNode( true ), submenu );
 		} );
 
-		menu.classList.add( 'js-has-submenu-toggle' );
+		menu.classList.add( 'has-submenu-toggle', 'js-has-submenu-toggle' );
 
 	};
 
