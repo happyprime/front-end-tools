@@ -20,79 +20,49 @@
 
 					<div>
 
-						<article>
-							<div class="article-content-flow">
-								<h1>Section Scroller</h1>
-								<p>This is a plugin for scrolling smoothly between full-height sections of content.</p>
-								<p>Use your mouse, touchpad, up and down arrow keys, or space bar to scroll through the following sections!</p>
-								<h2>Usage</h2>
-								<p>Include the stylesheet and script on your page, and initialize the JavaScript with <code>sectionScroll.init();</code>.</p>
-								<p>Settings can be passed in to the plugin like so:</p>
-								<code>
-									<pre>sectionScroll.init( {
-	scrollableSection: document.querySelector( '.scrolling-sections' ),
-	transitionDuration: '1s',
-	transitionTimingFunction: 'ease',
-} );</pre>
-								</code>
-								<p>The available settings are as follows:</p>
-								<ul>
-									<li><code>scrollableSection</code>: The element containing the scrollable sections. Defaults to <code>document.querySelector( '.scrolling-sections' )</code>.</li>
-									<li><code>transitionDuration</code>: The scroll animation <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transition-duration">duration</a>. Defaults to <code>1s</code>.</li>
-									<li><code>transitionTimingFunction</code>: The scroll animation <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function">timing function</a>. Defaults to <code>ease</code>.</li>
-								</ul>
-							</div>
+						<article class="article-content-flow">
+							<h1>Section Scroller</h1>
+							<p>This is a plugin for scrolling smoothly between full-height sections of content.</p>
+							<p>Use your mouse, touchpad, up and down arrow keys, or space bar to scroll through the following sections!</p>
+							<p>Plugin usage notes are below the scrolling sections.</p>
 						</article>
 
-						<article>
-							<img
-								src="https://source.unsplash.com/featured/1600x900/?summer"
-								alt="A random summer photo"
-								class="visual"
-							/>
-							<div>
-								<p>Summer</p>
-							</div>
+						<article style="background-image: url('https://source.unsplash.com/featured/1600x900/?summer');">
+							<p>Summer</p>
 						</article>
 
-						<article>
-							<img
-								src="https://source.unsplash.com/featured/1600x900/?autumn"
-								alt="A random autumn photo"
-								class="visual"
-							/>
-							<div>
-								<p>Autumn</p>
-							</div>
+						<article style="background-image: url('https://source.unsplash.com/featured/1600x900/?autumn');">
+							<p>Autumn</p>
 						</article>
 
-						<article>
-							<img
-								src="https://source.unsplash.com/featured/1600x900/?winter"
-								alt="A random winter photo"
-								class="visual"
-							/>
-							<div>
-								<p>Winter</p>
-							</div>
+						<article style="background-image: url('https://source.unsplash.com/featured/1600x900/?winter');">
+							<p>Winter</p>
 						</article>
 
-						<article>
-							<img
-								src="https://source.unsplash.com/featured/1600x900/?spring"
-								alt="A random spring photo"
-								class="visual"
-							/>
-							<div>
-								<p>Spring</p>
-							</div>
+						<article style="background-image: url('https://source.unsplash.com/featured/1600x900/?spring');">
+							<p>Spring</p>
 						</article>
 
 					</div>
 
 				</section>
 
-				<p class="placeholder-content">Placeholder content</p>
+				<h2>Usage</h2>
+				<p>Include the stylesheet and script on your page, and initialize the JavaScript with <code>sectionScroll.init();</code>.</p>
+				<p>Settings can be passed in to the plugin like so:</p>
+				<code>
+					<pre>sectionScroll.init( {
+	scrollableSection: document.querySelector( '.scrolling-sections' ),
+	transitionDuration: '1s',
+	transitionTimingFunction: 'ease',
+} );</pre>
+				</code>
+				<p>The available settings are as follows:</p>
+				<ul>
+					<li><code>scrollableSection</code>: The element containing the scrollable sections. Defaults to <code>document.querySelector( '.scrolling-sections' )</code>.</li>
+					<li><code>transitionDuration</code>: The scroll animation <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transition-duration">duration</a>. Defaults to <code>1s</code>.</li>
+					<li><code>transitionTimingFunction</code>: The scroll animation <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function">timing function</a>. Defaults to <code>ease</code>.</li>
+				</ul>
 
 			</article>
 

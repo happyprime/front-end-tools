@@ -1,5 +1,4 @@
 .scrolling-sections {
-	margin: -40px 0 0 -40px; /* Overwrite for rules in common.css */
 	overflow: hidden;
 	position: relative;
 	width: 100vw;
@@ -17,37 +16,24 @@
 .scrolling-sections article {
 	height: 100vh;
 	height: calc(var(--vh, 1vh) * 100);
-	width: 100%;
-}
-
-.scrolling-sections article > * {
-	height: 100%;
 	overflow: hidden;
 	position: relative;
 	width: 100%;
 }
 
-.scrolling-sections article > img {
-	object-fit: cover;
-}
-
-.scrolling-sections article > div {
-	padding: 40px; /* Specific to match rules in common.css */
-	position: relative;
-}
-
-.scrolling-sections article > * + div {
-	margin-top: -100vh;
-}
-
-/* Overwrite for rules in common.css */
+/* Overwrites for rules in common.css and other demo-specific styles. */
 .centered .scrolling-sections {
 	left: 50%;
-	margin-left: -50vw;
+	margin: -40px -40px 0 -50vw;
 }
 
-.centered article > div {
-	margin-left: auto;
-	margin-right: auto;
+.centered .scrolling-sections article {
+	background: no-repeat center;
+	background-size: cover;
+	margin: 0 auto;
+	padding: 40px;
+}
+
+.scrolling-sections .article-content-flow {
 	max-width: 80ch;
 }
