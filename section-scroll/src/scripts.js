@@ -80,23 +80,29 @@
 
 		state.articles = articles;
 
+	};
+
+	/**
+	 * Sets up classes and inline styles required for section scrolling.
+	 * @private
+	 */
+	const setupSection = () => {
+
 		settings.scrollableSection.classList.add( 'js-scrolling-sections' );
 
 		state.container = settings.scrollableSection.querySelector( 'div' );
 
+		if ( !sectionInViewport() ) {
+			state.index = state.articles.length - 2;
+
+			state.wheelHandler.turnOff();
+
+			scrollSection( 'down' );
+		}
+
 		state.container.style.transitionTimingFunction = settings.transitionTimingFunction;
 
 		state.container.style.transitionDuration = settings.transitionDuration;
-
-		if ( !sectionInViewport() ) {
-			state.index = state.articles.length;
-
-			state.container.style.transitionDuration = '0s';
-
-			scrollSection();
-
-			state.container.style.transitionDuration = settings.transitionDuration;
-		}
 
 	};
 
@@ -109,6 +115,9 @@
 	 */
 	const scrollSection = ( direction, event = false ) => {
 
+		// Return early if the scroll direction is not up or down.
+		if ( ![ 'up', 'down' ].includes( direction ) ) return;
+
 		// Return early if scrolling up and already on the first section.
 		if ( 'up' === direction && state.index === 0 ) return;
 
@@ -119,7 +128,7 @@
 			if ( !settings.scrollableSection.nextElementSibling ) return;
 
 			// If there is content after the Scrolling Sections block,
-			// disable `WheelIndicator` before returning.
+			// disable WheelIndicator before returning.
 			state.wheelHandler.turnOff();
 
 			return;
@@ -145,6 +154,34 @@
 	};
 
 	/**
+	 * Reenables WheelIndicator if the top of the scrollable section
+	 * hits the top of the viewport.
+	 * @private
+	 */
+	const scrollHandler = () => {
+
+		if ( !sectionInViewport() ) return;
+
+		state.wheelHandler.turnOn();
+
+	};
+
+	/**
+	 * Sets the value of a vh unit to 1% of the viewport height.
+	 *
+	 * This is for mobile browsers, where the address bar can
+	 * introduce unexpected results when vh units are used.
+	 * @private
+	 */
+	const setVhUnit = () => {
+
+		const vh = window.innerHeight * 0.01;
+
+		document.documentElement.style.setProperty( '--vh', `${vh}px` );
+
+	}
+
+	/**
 	 * Handles scrolling via the up and down arrow and space keys.
 	 * @private
 	 * @param {Event} event The keydown event.
@@ -164,20 +201,7 @@
 	};
 
 	/**
-	 * Reenables `WheelIndicator` if the top of the scrollable section
-	 * hits the top of the viewport.
-	 * @private
-	 */
-	const scrollHandler = () => {
-
-		if ( !sectionInViewport() ) return;
-
-		state.wheelHandler.turnOn();
-
-	};
-
-	/**
-	 * Handles scrolling via swiping on a touch device.
+	 * Handles scrolling on touch devices.
 	 * @private
 	 * @param {Event} event The touch event.
 	 */
@@ -203,21 +227,6 @@
 	};
 
 	/**
-	 * Sets the value of a vh unit to 1% of the viewport height.
-	 *
-	 * This is for mobile browsers, where the address bar can
-	 * introduce inconsistencies if it is displayed.
-	 * @private
-	 */
-	const setVhUnit = () => {
-
-		const vh = window.innerHeight * 0.01;
-
-		document.documentElement.style.setProperty( '--vh', `${vh}px` );
-
-	}
-
-	/**
 	 * Destroys the current initialization.
 	 * @public
 	 */
@@ -233,6 +242,7 @@
 		window.removeEventListener( 'keydown', keyDownHandler, true );
 		settings.scrollableSection.removeEventListener( 'touchstart', touchHandler, true );
 		settings.scrollableSection.removeEventListener( 'touchend', touchHandler, true );
+		settings.scrollableSection.removeEventListener( 'touchmove', touchHandler, true );
 
 		// Reset variables.
 		settings = null;
@@ -267,26 +277,22 @@
 		// Return early if no articles were found.
 		if ( !state.articles ) return;
 
-		// Use `WheelIndicator` to listen for wheel events.
+		// Use WheelIndicator to listen for wheel events.
 		state.wheelHandler = new WheelIndicator( {
 			elem: settings.scrollableSection,
 			callback: ( event ) => scrollSection( event.direction, event )
 		} );
 
-		// Listen for scroll events.
+		// Set up classes and styles to leverage for functionality.
+		setupSection();
+
+		// Set up event listeners.
 		window.addEventListener( 'scroll', scrollHandler, true );
-
-		// Listen for the resize events.
 		window.addEventListener( 'resize', setVhUnit, true );
-
-		// Listen for keydown events.
 		window.addEventListener( 'keydown', keyDownHandler, true );
-
-		// Listen for touchstart events.
 		settings.scrollableSection.addEventListener( 'touchstart', touchHandler, true );
-
-		// Listen for touchend events.
 		settings.scrollableSection.addEventListener( 'touchend', touchHandler, true );
+		settings.scrollableSection.addEventListener( 'touchmove', touchHandler, true );
 
 	};
 
