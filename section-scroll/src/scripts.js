@@ -227,6 +227,29 @@
 	};
 
 	/**
+	 * Handles touchmove scrolling on devices.
+	 * @private
+	 * @param {Event} event The touch event.
+	 */
+	const touchMoveHandler = ( event ) => {
+
+		if ( !sectionInViewport() ) return;
+
+		const direction = ( event.changedTouches[0].screenY > state.touchStartY )
+			? 'up'
+			: 'down';
+
+		// Return early if scrolling up and already on the first section.
+		if ( 'up' === direction && state.index === 0 ) return;
+
+		// Return early if scrolling down and already on the last section.
+		if ( 'down' === direction && state.index + 1 === state.articles.length ) return;
+
+		event.preventDefault();
+
+	};
+
+	/**
 	 * Destroys the current initialization.
 	 * @public
 	 */
@@ -242,7 +265,7 @@
 		window.removeEventListener( 'keydown', keyDownHandler, true );
 		settings.scrollableSection.removeEventListener( 'touchstart', touchHandler, true );
 		settings.scrollableSection.removeEventListener( 'touchend', touchHandler, true );
-		settings.scrollableSection.removeEventListener( 'touchmove', touchHandler, true );
+		settings.scrollableSection.removeEventListener( 'touchmove', touchMoveHandler, true );
 
 		// Reset variables.
 		settings = null;
@@ -292,7 +315,7 @@
 		window.addEventListener( 'keydown', keyDownHandler, true );
 		settings.scrollableSection.addEventListener( 'touchstart', touchHandler, true );
 		settings.scrollableSection.addEventListener( 'touchend', touchHandler, true );
-		settings.scrollableSection.addEventListener( 'touchmove', touchHandler, true );
+		settings.scrollableSection.addEventListener( 'touchmove', touchMoveHandler, true );
 
 	};
 
