@@ -16,7 +16,8 @@ body.menu-toggled-open {
 	width: 100%;
 }
 
-#nav a {
+#nav a,
+#nav .submenu-toggle {
 	color: #fff;
 }
 
